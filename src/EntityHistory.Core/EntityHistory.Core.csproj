@@ -61,15 +61,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Entities\EntityChange.cs" />
+    <Compile Include="Entities\EntityChangeSet.cs" />
+    <Compile Include="Entities\EntityPropertyChange.cs" />
     <Compile Include="EntityChangeType.cs" />
     <Compile Include="Extensions\EntityHistoryHelperExtensions.cs" />
     <Compile Include="Interfaces\IEntity.cs" />
-    <Compile Include="Interfaces\IEntityChange.cs" />
-    <Compile Include="Interfaces\IEntityChangeSet.cs" />
     <Compile Include="Interfaces\IEntityHistoryConfiguration.cs" />
     <Compile Include="Interfaces\IEntityHistoryHelper.cs" />
     <Compile Include="Interfaces\IEntityHistoryStore.cs" />
-    <Compile Include="Interfaces\IEntityPropertyChange.cs" />
     <Compile Include="Interfaces\ISelectorList.cs" />
     <Compile Include="NamedTypeSelector.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
