@@ -1,6 +1,6 @@
 using System;
 
-namespace EntityHistory.Core
+namespace EntityHistory.Abstractions
 {
     /// <summary>
     /// Used to represent a named type selector.

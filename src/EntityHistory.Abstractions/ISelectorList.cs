@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace EntityHistory.Core.Interfaces
+namespace EntityHistory.Abstractions
 {
     public interface ISelectorList : IList<NamedTypeSelector>
     {

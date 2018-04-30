@@ -5,28 +5,10 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 {
-    public class EntityChangeConfig<TEntityChange, TPrimaryKey> : IEntityTypeConfiguration<TEntityChange>
-        where TEntityChange: EntityChange<TPrimaryKey> 
-        where TPrimaryKey : struct, IEquatable<TPrimaryKey>
+    public class EntityChangeConfig<TEntityChange, TKey> : IEntityTypeConfiguration<TEntityChange>
+        where TEntityChange: EntityChange<TKey> 
+        where TKey : IEquatable<TKey>
     {
-        /// <summary>
-        /// Maximum length of <see cref="EntityChange{TPrimaryKey}.EntityId"/> property.
-        /// Value: 48.
-        /// </summary>
-        public const int MaxEntityIdLength = 48;
-
-        /// <summary>
-        /// Maximum length of <see cref="EntityChange{TPrimaryKey}.EntityTypeFullName"/> property.
-        /// Value: 192.
-        /// </summary>
-        public const int MaxEntityTypeFullNameLength = 192;
-
-        /// <summary>
-        /// Maximum length of <see cref="EntityChange{TPrimaryKey}.EntityUniqueKey"/> property.
-        /// Value: 512.
-        /// </summary>
-        public const int MaxEntityUniqueKeyLength = 512;
-
         public void Configure(EntityTypeBuilder<TEntityChange> builder)
         {
             builder.ToTable("EntityHistoryEntityChanges");
@@ -34,9 +16,9 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Property(p => p.EntityId).HasMaxLength(MaxEntityIdLength);
-            builder.Property(p => p.EntityTypeFullName).HasMaxLength(MaxEntityTypeFullNameLength);
-            builder.Property(p => p.EntityUniqueKey).HasMaxLength(MaxEntityUniqueKeyLength);
+            builder.Property(p => p.EntityId).HasMaxLength(EntityChange<TKey>.MaxEntityIdLength);
+            builder.Property(p => p.EntityTypeFullName).HasMaxLength(EntityChange<TKey>.MaxEntityTypeFullNameLength);
+            builder.Property(p => p.EntityUniqueKey).HasMaxLength(EntityChange<TKey>.MaxEntityUniqueKeyLength);
 
             builder.Ignore(p => p.EntityEntry);
 

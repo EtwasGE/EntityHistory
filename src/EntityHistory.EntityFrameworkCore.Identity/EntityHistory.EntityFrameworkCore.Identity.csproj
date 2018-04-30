@@ -185,6 +185,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="EntityHistoryDbContext.cs" />
+    <Compile Include="EntityHistoryDbContextBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -192,6 +193,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EntityHistory.Abstractions\EntityHistory.Abstractions.csproj">
+      <Project>{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}</Project>
+      <Name>EntityHistory.Abstractions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntityHistory.Core\EntityHistory.Core.csproj">
       <Project>{6A8D2E48-A827-4D4F-9EF3-B80204429004}</Project>
       <Name>EntityHistory.Core</Name>

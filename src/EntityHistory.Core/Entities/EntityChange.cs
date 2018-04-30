@@ -1,17 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityHistory.Core.Interfaces;
+using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core.Entities
 {
-    //public class EntityChange : EntityChange<long>, IEntity
-    //{
-    //}
-
-    public class EntityChange<TPrimaryKey> : IEntity<TPrimaryKey> 
-        where TPrimaryKey : struct, IEquatable<TPrimaryKey>
+    public class EntityChange<TKey> : IEntity<TKey> 
+        where TKey : IEquatable<TKey>
     {
-        public virtual TPrimaryKey Id { get; set; }
+        /// <summary>
+        /// Maximum length of <see cref="EntityChange{TKey}.EntityId"/> property.
+        /// Value: 48.
+        /// </summary>
+        public const int MaxEntityIdLength = 48;
+
+        /// <summary>
+        /// Maximum length of <see cref="EntityChange{TKey}.EntityTypeFullName"/> property.
+        /// Value: 192.
+        /// </summary>
+        public const int MaxEntityTypeFullNameLength = 192;
+
+        /// <summary>
+        /// Maximum length of <see cref="EntityChange{TKey}.EntityUniqueKey"/> property.
+        /// Value: 512.
+        /// </summary>
+        public const int MaxEntityUniqueKeyLength = 512;
+
+        public virtual TKey Id { get; set; }
 
         /// <summary>
         /// ChangeType.
@@ -27,21 +41,16 @@ namespace EntityHistory.Core.Entities
         /// FullName of the entity type.
         /// </summary>
         public virtual string EntityTypeFullName { get; set; }
-
-        /// <summary>
-        /// Unique key of the entity.
-        /// </summary>
-        public virtual string EntityUniqueKey { get; set; }
-
+        
         /// <summary>
         /// Gets/sets change set id, used to group entity changes.
         /// </summary>
-        public virtual TPrimaryKey EntityChangeSetId { get; set; }
+        public virtual TKey EntityChangeSetId { get; set; }
 
         /// <summary>
         /// PropertyChanges.
         /// </summary>
-        public virtual ICollection<EntityPropertyChange<TPrimaryKey>> PropertyChanges { get; set; }
+        public virtual ICollection<EntityPropertyChange<TKey>> PropertyChanges { get; set; }
         
         public virtual object EntityEntry { get; set; }
     }

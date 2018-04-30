@@ -1,23 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityHistory.Core.Interfaces;
-
-//namespace EntityHistory.Core.Entities.Principal
-//{
-//    public class EntityChangeSet<TUser> : EntityChangeSet<long, TUser>, IEntity
-//        where TUser : class
-//    {
-//    }
-//}
+using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core.Entities
 {
-    //public class EntityChangeSet : EntityChangeSet<long>, IEntity
-    //{
-    //}
-
-    public class EntityChangeSet<TPrimaryKey, TUser> : EntityChangeSet<TPrimaryKey>
-        where TPrimaryKey : struct, IEquatable<TPrimaryKey>
+    public class EntityChangeSet<TKey, TUser> : EntityChangeSet<TKey>
+        where TKey : struct, IEquatable<TKey>
         where TUser : class
     {
         /// <summary>
@@ -26,10 +14,25 @@ namespace EntityHistory.Core.Entities
         public virtual TUser User { get; set; }
     }
 
-    public class EntityChangeSet<TPrimaryKey> : IEntity<TPrimaryKey> 
-        where TPrimaryKey : struct, IEquatable<TPrimaryKey>
+    public class EntityChangeSet<TKey> : IEntity<TKey> 
+        where TKey : struct, IEquatable<TKey>
     {
-        public virtual TPrimaryKey Id { get; set; }
+        /// <summary>
+        /// Maximum length of <see cref="EntityChangeSet{TKey}.BrowserInfo"/> property.
+        /// </summary>
+        public const int MaxBrowserInfoLength = 512;
+
+        /// <summary>
+        /// Maximum length of <see cref="EntityChangeSet{TKey}.ClientIpAddress"/> property.
+        /// </summary>
+        public const int MaxClientIpAddressLength = 64;
+
+        /// <summary>
+        /// Maximum length of <see cref="EntityChangeSet{TKey}.ClientName"/> property.
+        /// </summary>
+        public const int MaxClientNameLength = 128;
+
+        public virtual TKey Id { get; set; }
 
         /// <summary>
         /// Browser information if this entity is changed in a web request.
@@ -47,18 +50,18 @@ namespace EntityHistory.Core.Entities
         public virtual string ClientName { get; set; }
 
         /// <summary>
-        /// Change time.
+        /// Creation time of this entity.
         /// </summary>
-        public virtual DateTime ChangeTime { get; set; }
+        public virtual DateTime CreationTime { get; set; }
 
         /// <summary>
         /// Change UserId.
         /// </summary>
-        public virtual TPrimaryKey? UserId { get; set; }
+        public virtual TKey? UserId { get; set; }
 
         /// <summary>
         /// Entity changes grouped in this change set.
         /// </summary>
-        public virtual ICollection<EntityChange<TPrimaryKey>> EntityChanges { get; set; }
+        public virtual ICollection<EntityChange<TKey>> EntityChanges { get; set; }
     }
 }

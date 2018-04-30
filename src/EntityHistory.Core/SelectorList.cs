@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using EntityHistory.Core.Interfaces;
+using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core
 {

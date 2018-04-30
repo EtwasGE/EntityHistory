@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EntityHistory.Core.Interfaces
+namespace EntityHistory.Abstractions
 {
     /// <summary>
     /// Used to configure entity history.

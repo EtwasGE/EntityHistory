@@ -1,17 +1,13 @@
-﻿using System;
-using EntityHistory.Core.Entities;
-using EntityHistory.Core.Interfaces;
+﻿using EntityHistory.Abstractions;
 using Nito.AsyncEx;
 
 namespace EntityHistory.Core.Extensions
 {
     public static class EntityHistoryHelperExtensions
     {
-        public static void Save<TEntityEntry, TEntityChangeSet, TPrimaryKey>(this IEntityHistoryHelper<TEntityEntry, TEntityChangeSet, TPrimaryKey> entityHistoryHelper, TEntityChangeSet changeSet)
-            where TEntityChangeSet : EntityChangeSet<TPrimaryKey> 
-            where TPrimaryKey : struct, IEquatable<TPrimaryKey>
+        public static void UpdateAndSave<TEntityEntry, TEntityChangeSet>(this IEntityHistoryHelper<TEntityEntry, TEntityChangeSet> entityHistoryHelper, TEntityChangeSet changeSet)
         {
-            AsyncContext.Run(() => entityHistoryHelper.SaveAsync(changeSet));
+            AsyncContext.Run(() => entityHistoryHelper.UpdateAndSaveAsync(changeSet));
         }
     }
 }
