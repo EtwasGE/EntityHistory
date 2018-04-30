@@ -112,6 +112,10 @@
       <Project>{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}</Project>
       <Name>EntityHistory.Abstractions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EntityHistory.Configuration\EntityHistory.Configuration.csproj">
+      <Project>{42AE285B-F48D-4E07-892E-EEF957F87A8B}</Project>
+      <Name>EntityHistory.Configuration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EntityHistory.Core\EntityHistory.Core.csproj">
       <Project>{6A8D2E48-A827-4D4F-9EF3-B80204429004}</Project>
       <Name>EntityHistory.Core</Name>

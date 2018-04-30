@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntityHistory.Core.Attributes
+namespace EntityHistory.Configuration.Attributes
 {
     /// <summary>
     /// Used with OptIn AnnotationMode to include the entity on the Audit logs.

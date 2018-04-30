@@ -18,13 +18,7 @@ namespace EntityHistory.Core.Entities
         /// Value: 192.
         /// </summary>
         public const int MaxEntityTypeFullNameLength = 192;
-
-        /// <summary>
-        /// Maximum length of <see cref="EntityChange{TKey}.EntityUniqueKey"/> property.
-        /// Value: 512.
-        /// </summary>
-        public const int MaxEntityUniqueKeyLength = 512;
-
+        
         public virtual TKey Id { get; set; }
 
         /// <summary>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EntityHistory.Abstractions
+namespace EntityHistory.Abstractions.Configuration
 {
     /// <summary>
     /// Used to configure entity history.
@@ -19,15 +19,15 @@ namespace EntityHistory.Abstractions
         /// Default: false.
         /// </summary>
         bool IsEnabledForAnonymousUsers { get; set; }
-
-        /// <summary>
-        /// List of selectors to select classes/interfaces which should be tracked as default.
-        /// </summary>
-        ISelectorList Selectors { get; }
-
+        
         /// <summary>
         /// Ignored types for serialization on entity history tracking.
         /// </summary>
         List<Type> IgnoredTypes { get; }
+
+        /// <summary>
+        /// Sets the configuration for a specific entity (table)
+        /// </summary>
+        void Settings(ISettingsConfigurator config);
     }
 }

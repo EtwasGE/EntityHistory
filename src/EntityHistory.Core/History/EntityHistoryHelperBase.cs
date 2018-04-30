@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using EntityHistory.Abstractions;
 using EntityHistory.Abstractions.Auditing;
+using EntityHistory.Abstractions.Configuration;
 using EntityHistory.Abstractions.Session;
 using EntityHistory.Core.Auditing;
 using EntityHistory.Core.Entities;
@@ -33,7 +34,7 @@ namespace EntityHistory.Core.History
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        protected abstract bool ShouldSaveEntityHistory(TEntityEntry entityEntry);
+        protected abstract bool ShouldSaveEntityHistory(TEntityEntry entityEntry, bool defaultValue = false);
         protected abstract TEntityChange GetEntityChange(TEntityEntry entityEntry);
         protected abstract void UpdateChangeSet(TEntityChangeSet entityChangeSet);
 

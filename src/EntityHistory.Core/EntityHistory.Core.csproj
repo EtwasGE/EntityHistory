@@ -67,8 +67,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\HistoryIgnoreAttribute.cs" />
-    <Compile Include="Attributes\HistoryIncludeAttribute.cs" />
     <Compile Include="Auditing\NullClientInfoProvider.cs" />
     <Compile Include="Entities\EntityChange.cs" />
     <Compile Include="Entities\EntityChangeSet.cs" />

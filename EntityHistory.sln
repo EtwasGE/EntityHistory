@@ -39,6 +39,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityHistory.EntityFramewo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityHistory.Abstractions", "src\EntityHistory.Abstractions\EntityHistory.Abstractions.csproj", "{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityHistory.Configuration", "src\EntityHistory.Configuration\EntityHistory.Configuration.csproj", "{42AE285B-F48D-4E07-892E-EEF957F87A8B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -118,6 +124,7 @@ Global
 		{85C5607D-F83B-433E-A70C-17E2319C11C1} = {9DC6B520-5130-4E22-8264-3674647D14E7}
 		{A88F17EB-0816-4CBB-BC95-3679EEC23DBE} = {96197B8E-6AA1-4393-8897-E784F8476036}
 		{C12BD493-647E-4AB7-A42A-31A5C02F9AC9} = {593281B8-6657-4E71-80AD-3CD7ED584979}
+		{42AE285B-F48D-4E07-892E-EEF957F87A8B} = {593281B8-6657-4E71-80AD-3CD7ED584979}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2D09843-C0D5-4D7E-B523-7C23D80CA8B9}

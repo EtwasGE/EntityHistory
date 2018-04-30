@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EntityHistory.Core.Attributes
+namespace EntityHistory.Configuration.Attributes
 {
     /// <summary>
     /// Used in OptOut mode to ignore the entity on the Audit logs.

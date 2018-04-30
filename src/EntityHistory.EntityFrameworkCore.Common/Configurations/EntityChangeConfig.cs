@@ -18,7 +18,6 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 
             builder.Property(p => p.EntityId).HasMaxLength(EntityChange<TKey>.MaxEntityIdLength);
             builder.Property(p => p.EntityTypeFullName).HasMaxLength(EntityChange<TKey>.MaxEntityTypeFullNameLength);
-            builder.Property(p => p.EntityUniqueKey).HasMaxLength(EntityChange<TKey>.MaxEntityUniqueKeyLength);
 
             builder.Ignore(p => p.EntityEntry);
 
@@ -28,7 +27,6 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 
             builder.HasIndex(e => new { e.EntityChangeSetId });
             builder.HasIndex(e => new { e.EntityTypeFullName, e.EntityId });
-            builder.HasIndex(e => new { e.EntityUniqueKey });
         }
     }
 }

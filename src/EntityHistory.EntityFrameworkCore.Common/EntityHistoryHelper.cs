@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EntityHistory.Abstractions;
+using EntityHistory.Abstractions.Configuration;
+using EntityHistory.Configuration;
 using EntityHistory.Core;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.Extensions;
@@ -25,87 +26,50 @@ namespace EntityHistory.EntityFrameworkCore.Common
         {
         }
 
-        protected override bool ShouldSaveEntityHistory(EntityEntry entityEntry)
+        protected override bool ShouldSaveEntityHistory(EntityEntry entityEntry, bool defaultValue = false)
         {
-            //if (entityEntry.State == EntityState.Detached ||
-            //    entityEntry.State == EntityState.Unchanged)
-            //{
-            //    return false;
-            //}
+            if (entityEntry.State == EntityState.Detached ||
+                entityEntry.State == EntityState.Unchanged)
+            {
+                return false;
+            }
 
-            //if (_configuration.IgnoredTypes.Any(t => t.IsInstanceOfType(entityEntry.Entity)))
-            //{
-            //    return false;
-            //}
+            if (Configuration.IgnoredTypes.Any(t => t.IsInstanceOfType(entityEntry.Entity)))
+            {
+                return false;
+            }
 
-            //var entityType = entityEntry.Entity.GetType();
-            //if (!EntityHelper.IsEntity(entityType))
-            //{
-            //    return false;
-            //}
-
-            //if (!entityType.IsPublic)
-            //{
-            //    return false;
-            //}
-
-            //if (entityType.GetTypeInfo().IsDefined(typeof(AuditedAttribute), true))
-            //{
-            //    return true;
-            //}
-
-            //if (entityType.GetTypeInfo().IsDefined(typeof(DisableAuditingAttribute), true))
-            //{
-            //    return false;
-            //}
-
-            //if (_configuration.Selectors.Any(selector => selector.Predicate(entityType)))
-            //{
-            //    return true;
-            //}
-
-            //var properties = entityEntry.Metadata.GetProperties();
-            //if (properties.Any(p => p.PropertyInfo?.IsDefined(typeof(AuditedAttribute)) ?? false))
-            //{
-            //    return true;
-            //}
-
-            //return defaultValue;
-
-            return true;
+            var entityType = entityEntry.Entity.GetType();
+            if (!entityType.IsPublic)
+            {
+                return false;
+            }
+            
+            return GlobalConfigHelper.IsIncluded(entityType, defaultValue);
         }
 
         protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
         {
-            //if (propertyEntry.Metadata.Name == "Id")
-            //{
-            //    return false;
-            //}
+            //TODO check
+            if (propertyEntry.Metadata.IsPrimaryKey())
+            {
+                return false;
+            }
 
-            //var propertyInfo = propertyEntry.Metadata.PropertyInfo;
-            //if (propertyInfo.IsDefined(typeof(DisableAuditingAttribute), true))
-            //{
-            //    return false;
-            //}
+            var entityType = propertyEntry.EntityEntry.Entity.GetType();
+            var propertyName = propertyEntry.Metadata.Name;
 
-            //var classType = propertyInfo.DeclaringType;
-            //if (classType != null)
-            //{
-            //    if (classType.GetTypeInfo().IsDefined(typeof(DisableAuditingAttribute), true) &&
-            //        !propertyInfo.IsDefined(typeof(AuditedAttribute), true))
-            //    {
-            //        return false;
-            //    }
-            //}
+            if(!GlobalConfigHelper.IsIncluded(entityType, propertyName, defaultValue))
+            {
+                return false;
+            };
 
-            //if (propertyEntry.IsModified)
-            //{
-            //    return true;
-            //}
+            if (propertyEntry.IsModified)
+            {
+                return true;
+            }
 
-            //return defaultValue;
-
-            return true;
+            return defaultValue;
         }
 
         [CanBeNull]
