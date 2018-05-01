@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 {
-    public class EntityChangeSetConfig<TEntityChangeSet, TKey, TUser> : EntityChangeSetConfig<TEntityChangeSet, TKey>
-        where TEntityChangeSet : EntityChangeSet<TKey, TUser>
-        where TKey : struct, IEquatable<TKey>
+    public class EntityChangeSetConfig<TEntityChangeSet, TUserKey, TUser> : EntityChangeSetConfig<TEntityChangeSet, TUserKey>
+        where TEntityChangeSet : EntityChangeSet<TUserKey, TUser>
+        where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
     {
         public override void Configure(EntityTypeBuilder<TEntityChangeSet> builder)
@@ -20,9 +20,9 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
         }
     }
 
-    public class EntityChangeSetConfig<TEntityChangeSet, TKey> : IEntityTypeConfiguration<TEntityChangeSet>
-        where TEntityChangeSet : EntityChangeSet<TKey>
-        where TKey : struct, IEquatable<TKey>
+    public class EntityChangeSetConfig<TEntityChangeSet, TUserKey> : IEntityTypeConfiguration<TEntityChangeSet>
+        where TEntityChangeSet : EntityChangeSet<TUserKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         public virtual void Configure(EntityTypeBuilder<TEntityChangeSet> builder)
         {
@@ -31,9 +31,9 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Property(p => p.BrowserInfo).HasMaxLength(EntityChangeSet<TKey>.MaxBrowserInfoLength);
-            builder.Property(p => p.ClientIpAddress).HasMaxLength(EntityChangeSet<TKey>.MaxClientIpAddressLength);
-            builder.Property(p => p.ClientName).HasMaxLength(EntityChangeSet<TKey>.MaxClientNameLength);
+            builder.Property(p => p.BrowserInfo).HasMaxLength(EntityChangeSet<TUserKey>.MaxBrowserInfoLength);
+            builder.Property(p => p.ClientIpAddress).HasMaxLength(EntityChangeSet<TUserKey>.MaxClientIpAddressLength);
+            builder.Property(p => p.ClientName).HasMaxLength(EntityChangeSet<TUserKey>.MaxClientNameLength);
 
             builder.HasMany(p => p.EntityChanges)
                 .WithOne()

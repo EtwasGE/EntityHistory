@@ -12,22 +12,17 @@ namespace EntityHistory.Abstractions.Configuration
         /// Used to enable/disable entity history system.
         /// Default: true. Set false to completely disable it.
         /// </summary>
-        bool IsEnabled { get; set; }
+        bool IsEnabled { get; }
 
         /// <summary>
         /// Set true to enable saving entity history if current user is not logged in.
         /// Default: false.
         /// </summary>
-        bool IsEnabledForAnonymousUsers { get; set; }
+        bool IsEnabledForAnonymousUsers { get; }
         
         /// <summary>
         /// Ignored types for serialization on entity history tracking.
         /// </summary>
         List<Type> IgnoredTypes { get; }
-
-        /// <summary>
-        /// Sets the configuration for a specific entity (table)
-        /// </summary>
-        void Settings(ISettingsConfigurator config);
     }
 }

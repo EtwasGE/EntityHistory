@@ -99,8 +99,9 @@
     <Compile Include="Configurations\EntityChangeSetConfig.cs" />
     <Compile Include="Configurations\EntityPropertyChangeConfig.cs" />
     <Compile Include="EntityHistoryHelper.cs" />
-    <Compile Include="EntityKeyHelper.cs" />
+    <Compile Include="EntityHistoryStore.cs" />
     <Compile Include="Extensions\EntityEntryExtensions.cs" />
+    <Compile Include="IEntityHistoryDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

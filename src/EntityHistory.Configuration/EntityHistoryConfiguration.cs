@@ -7,13 +7,18 @@ namespace EntityHistory.Configuration
 {
     public class EntityHistoryConfiguration : IEntityHistoryConfiguration
     {
-        public bool IsEnabled { get; set; }
+        public bool IsEnabled { get; protected set; }
 
-        public bool IsEnabledForAnonymousUsers { get; set; }
+        public bool IsEnabledForAnonymousUsers { get; protected set; }
 
-        public List<Type> IgnoredTypes { get; }
+        public List<Type> IgnoredTypes { get; protected set; }
 
         public EntityHistoryConfiguration()
+        {
+            Initial();
+        }
+
+        public void Initial()
         {
             IsEnabled = true;
             IsEnabledForAnonymousUsers = false;
@@ -21,14 +26,15 @@ namespace EntityHistory.Configuration
             IgnoredTypes = new List<Type>
             {
                 typeof(EntityChangeSet<>),
-                typeof(EntityChange<>),
-                typeof(EntityPropertyChange<>)
+                typeof(EntityChange),
+                typeof(EntityPropertyChange)
             };
+
+            OnEntityConfig(new EntitiesConfigurator());
         }
 
-        public virtual void Settings(ISettingsConfigurator config)
+        protected virtual void OnEntityConfig(IEntitiesConfigurator config)
         {
-            config.ForEntity<EntityChange<long>>();
         }
     }
 }

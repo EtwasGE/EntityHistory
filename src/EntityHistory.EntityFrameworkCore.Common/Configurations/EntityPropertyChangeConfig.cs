@@ -1,13 +1,11 @@
-﻿using System;
-using EntityHistory.Core.Entities;
+﻿using EntityHistory.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 {
-    public class EntityPropertyChangeConfig<TEntityPropertyChange, TKey> : IEntityTypeConfiguration<TEntityPropertyChange>
-        where TEntityPropertyChange: EntityPropertyChange<TKey> 
-        where TKey : IEquatable<TKey>
+    public class EntityPropertyChangeConfig<TEntityPropertyChange> : IEntityTypeConfiguration<TEntityPropertyChange>
+        where TEntityPropertyChange: EntityPropertyChange
     {
         public void Configure(EntityTypeBuilder<TEntityPropertyChange> builder)
         {
@@ -16,10 +14,10 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Property(p => p.NewValue).HasMaxLength(EntityPropertyChange<TKey>.MaxValueLength);
-            builder.Property(p => p.OriginalValue).HasMaxLength(EntityPropertyChange<TKey>.MaxValueLength);
-            builder.Property(p => p.PropertyName).HasMaxLength(EntityPropertyChange<TKey>.MaxPropertyNameLength);
-            builder.Property(p => p.PropertyTypeFullName).HasMaxLength(EntityPropertyChange<TKey>.MaxPropertyTypeFullNameLength);
+            builder.Property(p => p.NewValue).HasMaxLength(EntityPropertyChange.MaxValueLength);
+            builder.Property(p => p.OriginalValue).HasMaxLength(EntityPropertyChange.MaxValueLength);
+            builder.Property(p => p.PropertyName).HasMaxLength(EntityPropertyChange.MaxPropertyNameLength);
+            builder.Property(p => p.PropertyTypeFullName).HasMaxLength(EntityPropertyChange.MaxPropertyTypeFullNameLength);
 
             builder.HasIndex(e => e.EntityChangeId);
         }

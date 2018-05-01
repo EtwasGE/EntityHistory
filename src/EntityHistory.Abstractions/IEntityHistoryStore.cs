@@ -12,6 +12,6 @@ namespace EntityHistory.Abstractions
         /// Should save entity change set to a persistent store.
         /// </summary>
         /// <param name="entityChangeSet">Entity change set</param>
-        Task SaveAsync<TEntityChangeSet>(TEntityChangeSet entityChangeSet);
+        Task SaveAsync<TEntityChangeSet>(TEntityChangeSet entityChangeSet) where TEntityChangeSet : class;
     }
 }

@@ -3,28 +3,30 @@ using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core.Entities
 {
-    public class EntityPropertyChange<TKey> : IEntity<TKey> 
-        where TKey : IEquatable<TKey>
+    public class EntityPropertyChange : IEntity<Guid> 
     {
         /// <summary>
-        /// Maximum length of <see cref="EntityPropertyChange{TKey}.PropertyName"/> property.
+        /// Maximum length of <see cref="PropertyName"/> property.
         /// Value: 96.
         /// </summary>
         public const int MaxPropertyNameLength = 96;
 
         /// <summary>
-        /// Maximum length of <see cref="EntityPropertyChange{TKey}.NewValue"/> and <see cref="EntityPropertyChange{TKey}.OriginalValue"/> properties.
+        /// Maximum length of <see cref="NewValue"/> and <see cref="OriginalValue"/> properties.
         /// Value: 512.
         /// </summary>
         public const int MaxValueLength = 512;
 
         /// <summary>
-        /// Maximum length of <see cref="EntityPropertyChange{TKey}.PropertyTypeFullName"/> property.
+        /// Maximum length of <see cref="PropertyTypeFullName"/> property.
         /// Value: 192.
         /// </summary>
         public const int MaxPropertyTypeFullNameLength = 192;
 
-        public virtual TKey Id { get; set; }
+        /// <summary>
+        /// Primary Key
+        /// </summary>
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// NewValue.
@@ -50,6 +52,6 @@ namespace EntityHistory.Core.Entities
         /// <summary>
         /// EntityChangeId.
         /// </summary>
-        public virtual TKey EntityChangeId { get; set; }
+        public virtual Guid EntityChangeId { get; set; }
     }
 }

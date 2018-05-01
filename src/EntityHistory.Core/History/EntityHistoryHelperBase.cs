@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using EntityHistory.Abstractions;
 using EntityHistory.Abstractions.Auditing;
@@ -13,21 +14,21 @@ using JetBrains.Annotations;
 
 namespace EntityHistory.Core.History
 {
-    public abstract class EntityHistoryHelperBase<TEntityEntry, TEntityChangeSet, TEntityChange, TKey>
+    public abstract class EntityHistoryHelperBase<TEntityEntry, TEntityChangeSet, TEntityChange, TUserKey>
         : IEntityHistoryHelper<TEntityEntry, TEntityChangeSet>
-        where TEntityChangeSet : EntityChangeSet<TKey>, new()
-        where TEntityChange : EntityChange<TKey>
-        where TKey : struct, IEquatable<TKey>
+        where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
+        where TEntityChange : EntityChange
+        where TUserKey : struct, IEquatable<TUserKey>
     {
-        protected ISession<TKey> Session { get; set; }
-        protected IClientInfoProvider ClientInfoProvider { get; set; }
-        protected IEntityHistoryStore EntityHistoryStore { get; set; }
+        public ISession<TUserKey> Session { protected get; set; }
+        public IClientInfoProvider ClientInfoProvider { protected get; set; }
+        public IEntityHistoryStore EntityHistoryStore { protected get; set; }
 
         protected IEntityHistoryConfiguration Configuration { get; }
 
         protected EntityHistoryHelperBase(IEntityHistoryConfiguration configuration)
         {
-            Session = NullSession<TKey>.Instance;
+            Session = NullSession<TUserKey>.Instance;
             ClientInfoProvider = NullClientInfoProvider.Instance;
             EntityHistoryStore = NullEntityHistoryStore.Instance;
 
@@ -66,9 +67,9 @@ namespace EntityHistory.Core.History
 
             var changeSet = new TEntityChangeSet
             {
-                BrowserInfo = ClientInfoProvider.BrowserInfo.TruncateWithPostfix(EntityChangeSet<TKey>.MaxBrowserInfoLength),
-                ClientIpAddress = ClientInfoProvider.ClientIpAddress.TruncateWithPostfix(EntityChangeSet<TKey>.MaxClientIpAddressLength),
-                ClientName = ClientInfoProvider.ComputerName.TruncateWithPostfix(EntityChangeSet<TKey>.MaxClientNameLength),
+                BrowserInfo = ClientInfoProvider.BrowserInfo.TruncateWithPostfix(EntityChangeSet<TUserKey>.MaxBrowserInfoLength),
+                ClientIpAddress = ClientInfoProvider.ClientIpAddress.TruncateWithPostfix(EntityChangeSet<TUserKey>.MaxClientIpAddressLength),
+                ClientName = ClientInfoProvider.ComputerName.TruncateWithPostfix(EntityChangeSet<TUserKey>.MaxClientNameLength),
                 UserId = Session.UserId
             };
 
@@ -96,7 +97,7 @@ namespace EntityHistory.Core.History
                 return;
             }
 
-            if (changeSet.EntityChanges.Count == 0)
+            if (changeSet.EntityChanges.Count == 0 || changeSet.EntityChanges.All(x=> x.PropertyChanges.Count == 0))
             {
                 return;
             }

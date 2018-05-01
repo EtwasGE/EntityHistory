@@ -14,12 +14,39 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common
 {
-    public class EntityHistoryHelper<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TKey>
-        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TEntityChange, TKey>
-        where TEntityChangeSet : EntityChangeSet<TKey>, new()
-        where TEntityChange : EntityChange<TKey>, new()
-        where TEntityPropertyChange : EntityPropertyChange<TKey>, new()
-        where TKey : struct, IEquatable<TKey>
+    public class EntityHistoryHelper : EntityHistoryHelper<long>
+    {
+        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
+            : base(configuration)
+        {
+        }
+    }
+
+    public class EntityHistoryHelper<TUserKey, TUser> : EntityHistoryHelper<EntityChangeSet<TUserKey, TUser>, EntityChange, EntityPropertyChange, TUserKey>
+        where TUserKey : struct, IEquatable<TUserKey>
+        where TUser : class
+    {
+        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
+            : base(configuration)
+        {
+        }
+    }
+
+    public class EntityHistoryHelper<TUserKey> : EntityHistoryHelper<EntityChangeSet<TUserKey>, EntityChange, EntityPropertyChange, TUserKey>
+        where TUserKey : struct, IEquatable<TUserKey>
+    {
+        public EntityHistoryHelper(IEntityHistoryConfiguration configuration) 
+            : base(configuration)
+        {
+        }
+    }
+    
+    public class EntityHistoryHelper<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey>
+        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TEntityChange, TUserKey>
+        where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
+        where TEntityChange : EntityChange, new()
+        where TEntityPropertyChange : EntityPropertyChange, new()
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
             : base(configuration)
@@ -59,7 +86,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
             var entityType = propertyEntry.EntityEntry.Entity.GetType();
             var propertyName = propertyEntry.Metadata.Name;
 
-            if(!GlobalConfigHelper.IsIncluded(entityType, propertyName, defaultValue))
+            if(!GlobalConfigHelper.IsIncluded(entityType, propertyName, true))
             {
                 return false;
             };
@@ -129,8 +156,8 @@ namespace EntityHistory.EntityFrameworkCore.Common
                 {
                     propertyChanges.Add(new TEntityPropertyChange
                     {
-                        NewValue = isDeleted ? null : propertyEntry.CurrentValue.ToJsonString().TruncateWithPostfix(EntityPropertyChange<TKey>.MaxValueLength),
-                        OriginalValue = isCreated ? null : propertyEntry.OriginalValue.ToJsonString().TruncateWithPostfix(EntityPropertyChange<TKey>.MaxValueLength),
+                        NewValue = isDeleted ? null : propertyEntry.CurrentValue.ToJsonString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength),
+                        OriginalValue = isCreated ? null : propertyEntry.OriginalValue.ToJsonString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength),
                         PropertyName = property.Name,
                         PropertyTypeFullName = property.ClrType.FullName
                     });
@@ -190,7 +217,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
                             else
                             {
                                 // Update foreign key
-                                propertyChange.NewValue = newValue.TruncateWithPostfix(EntityPropertyChange<TKey>.MaxValueLength);
+                                propertyChange.NewValue = newValue.TruncateWithPostfix(EntityPropertyChange.MaxValueLength);
                             }
                         }
                     }

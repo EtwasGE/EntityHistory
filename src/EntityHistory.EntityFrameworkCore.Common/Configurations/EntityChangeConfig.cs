@@ -1,13 +1,11 @@
-﻿using System;
-using EntityHistory.Core.Entities;
+﻿using EntityHistory.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 {
-    public class EntityChangeConfig<TEntityChange, TKey> : IEntityTypeConfiguration<TEntityChange>
-        where TEntityChange: EntityChange<TKey> 
-        where TKey : IEquatable<TKey>
+    public class EntityChangeConfig<TEntityChange> : IEntityTypeConfiguration<TEntityChange>
+        where TEntityChange: EntityChange
     {
         public void Configure(EntityTypeBuilder<TEntityChange> builder)
         {
@@ -16,8 +14,8 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Id).ValueGeneratedOnAdd();
 
-            builder.Property(p => p.EntityId).HasMaxLength(EntityChange<TKey>.MaxEntityIdLength);
-            builder.Property(p => p.EntityTypeFullName).HasMaxLength(EntityChange<TKey>.MaxEntityTypeFullNameLength);
+            builder.Property(p => p.EntityId).HasMaxLength(EntityChange.MaxEntityIdLength);
+            builder.Property(p => p.EntityTypeFullName).HasMaxLength(EntityChange.MaxEntityTypeFullNameLength);
 
             builder.Ignore(p => p.EntityEntry);
 

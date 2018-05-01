@@ -45,11 +45,11 @@
   <ItemGroup>
     <Compile Include="Attributes\HistoryIgnoreAttribute.cs" />
     <Compile Include="Attributes\HistoryIncludeAttribute.cs" />
-    <Compile Include="EntitySettingsContainer.cs" />
+    <Compile Include="EntityConfigContainer.cs" />
     <Compile Include="EntityHistoryConfiguration.cs" />
-    <Compile Include="EntitySetting.cs" />
+    <Compile Include="EntityConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SettingsConfigurator.cs" />
+    <Compile Include="EntitiesConfigurator.cs" />
     <Compile Include="GlobalConfigHelper.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -20,9 +20,9 @@ namespace EntityHistory.EntityFrameworkCore.Principal
         protected EntityHistoryDbContext() { }
     }
 
-    public class EntityHistoryDbContext<TKey, TUser>
-        : EntityHistoryDbContext<EntityChangeSet<TKey, TUser>, EntityChange<TKey>, EntityPropertyChange<TKey>, TKey, TUser>
-        where TKey : struct, IEquatable<TKey>
+    public class EntityHistoryDbContext<TUserKey, TUser>
+        : EntityHistoryDbContext<EntityChangeSet<TUserKey, TUser>, EntityChange, EntityPropertyChange, TUserKey, TUser>
+        where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
     {
         /// <summary>
@@ -37,12 +37,12 @@ namespace EntityHistory.EntityFrameworkCore.Principal
         protected EntityHistoryDbContext() { }
     }
 
-    public class EntityHistoryDbContext<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TKey, TUser>
-        : EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TKey>
-        where TEntityChangeSet : EntityChangeSet<TKey, TUser>
-        where TEntityChange : EntityChange<TKey>
-        where TEntityPropertyChange : EntityPropertyChange<TKey>
-        where TKey : struct, IEquatable<TKey>
+    public class EntityHistoryDbContext<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey, TUser>
+        : EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey>
+        where TEntityChangeSet : EntityChangeSet<TUserKey, TUser>
+        where TEntityChange : EntityChange
+        where TEntityPropertyChange : EntityPropertyChange
+        where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
     {
         /// <summary>
@@ -59,7 +59,7 @@ namespace EntityHistory.EntityFrameworkCore.Principal
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TKey, TUser>());
+            modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TUserKey, TUser>());
         }
     }
 }
@@ -80,9 +80,9 @@ namespace EntityHistory.EntityFrameworkCore
         protected EntityHistoryDbContext() { }
     }
 
-    public class EntityHistoryDbContext<TKey>
-        : EntityHistoryDbContextBase<EntityChangeSet<TKey>, EntityChange<TKey>, EntityPropertyChange<TKey>, TKey>
-        where TKey : struct, IEquatable<TKey>
+    public class EntityHistoryDbContext<TUserKey>
+        : EntityHistoryDbContextBase<EntityChangeSet<TUserKey>, EntityChange, EntityPropertyChange, TUserKey>
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Initializes a new instance of the class.

@@ -4,8 +4,8 @@ using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core.Entities
 {
-    public class EntityChangeSet<TKey, TUser> : EntityChangeSet<TKey>
-        where TKey : struct, IEquatable<TKey>
+    public class EntityChangeSet<TUserKey, TUser> : EntityChangeSet<TUserKey>
+        where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
     {
         /// <summary>
@@ -14,9 +14,14 @@ namespace EntityHistory.Core.Entities
         public virtual TUser User { get; set; }
     }
 
-    public class EntityChangeSet<TKey> : IEntity<TKey> 
-        where TKey : struct, IEquatable<TKey>
+    public class EntityChangeSet<TUserKey> : IEntity<Guid> 
+        where TUserKey : struct, IEquatable<TUserKey>
     {
+        public EntityChangeSet()
+        {
+            EntityChanges = new List<EntityChange>();
+        }
+
         /// <summary>
         /// Maximum length of <see cref="EntityChangeSet{TKey}.BrowserInfo"/> property.
         /// </summary>
@@ -32,7 +37,10 @@ namespace EntityHistory.Core.Entities
         /// </summary>
         public const int MaxClientNameLength = 128;
 
-        public virtual TKey Id { get; set; }
+        /// <summary>
+        /// Primary Key
+        /// </summary>
+        public virtual Guid Id { get; set; }
 
         /// <summary>
         /// Browser information if this entity is changed in a web request.
@@ -57,11 +65,11 @@ namespace EntityHistory.Core.Entities
         /// <summary>
         /// Change UserId.
         /// </summary>
-        public virtual TKey? UserId { get; set; }
+        public virtual TUserKey? UserId { get; set; }
 
         /// <summary>
         /// Entity changes grouped in this change set.
         /// </summary>
-        public virtual ICollection<EntityChange<TKey>> EntityChanges { get; set; }
+        public virtual ICollection<EntityChange> EntityChanges { get; set; }
     }
 }

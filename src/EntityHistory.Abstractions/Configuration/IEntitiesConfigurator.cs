@@ -2,22 +2,27 @@
 
 namespace EntityHistory.Abstractions.Configuration
 {
-    public interface ISettingsConfigurator
+    public interface IEntitiesConfigurator
     {
         /// <summary>
         /// Sets the configuration for a specific entity (table)
         /// </summary>
         /// <param name="config">The configuration.</param>
-        ISettingsConfigurator ForEntity<TEntity>(Action<IEntitySetting<TEntity>> config);
+        IEntitiesConfigurator ForEntity<TEntity>(Action<IEntityConfiguration<TEntity>> config);
 
         /// <summary>
         /// Include all property
         /// </summary>
-        void ForEntity<TEntity>();
+        void AllInclude<TEntity>();
 
         /// <summary>
         /// Include all property
         /// </summary>
-        void ForEntity(Type entityType);
+        void AllInclude(Type entityType);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void ApplyConfiguration<TEntity>(IConfigurationModule<TEntity> module);
     }
 }

@@ -5,18 +5,18 @@ using System.Threading.Tasks;
 using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.Extensions;
+using EntityHistory.EntityFrameworkCore.Common;
 using EntityHistory.EntityFrameworkCore.Common.Configurations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore
 {
-    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TKey>
-        : DbContext
-        where TEntityChangeSet : EntityChangeSet<TKey>
-        where TEntityChange : EntityChange<TKey>
-        where TEntityPropertyChange : EntityPropertyChange<TKey>
-        where TKey : struct, IEquatable<TKey>
+    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey> : DbContext, IEntityHistoryDbContext
+        where TEntityChangeSet : EntityChangeSet<TUserKey>
+        where TEntityChange : EntityChange
+        where TEntityPropertyChange : EntityPropertyChange
+        where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Initializes a new instance of the class.
@@ -44,7 +44,7 @@ namespace EntityHistory.EntityFrameworkCore
         /// </summary>
         public virtual DbSet<TEntityPropertyChange> EntityPropertyChanges { get; set; }
 
-        public IEntityHistoryHelper<EntityEntry, TEntityChangeSet> EntityHistoryHelper { get; set; }
+        public IEntityHistoryHelper<EntityEntry, TEntityChangeSet> EntityHistoryHelper { protected get; set; }
 
         public override int SaveChanges()
         {
@@ -88,9 +88,9 @@ namespace EntityHistory.EntityFrameworkCore
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TKey>());
-            modelBuilder.ApplyConfiguration(new EntityChangeConfig<TEntityChange, TKey>());
-            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<TEntityPropertyChange, TKey>());
+            modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TUserKey>());
+            modelBuilder.ApplyConfiguration(new EntityChangeConfig<TEntityChange>());
+            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<TEntityPropertyChange>());
         }
     }
 }

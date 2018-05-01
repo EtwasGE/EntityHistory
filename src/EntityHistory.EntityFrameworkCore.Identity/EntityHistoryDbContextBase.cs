@@ -16,8 +16,8 @@ namespace EntityHistory.EntityFrameworkCore.Identity
     public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
         : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
         where TEntityChangeSet : EntityChangeSet<TKey, TUser>
-        where TEntityChange : EntityChange<TKey>
-        where TEntityPropertyChange : EntityPropertyChange<TKey>
+        where TEntityChange : EntityChange
+        where TEntityPropertyChange : EntityPropertyChange
         where TUser : IdentityUser<TKey>
         where TRole : IdentityRole<TKey>
         where TKey : struct, IEquatable<TKey>
@@ -53,7 +53,7 @@ namespace EntityHistory.EntityFrameworkCore.Identity
         /// </summary>
         public virtual DbSet<TEntityPropertyChange> EntityPropertyChanges { get; set; }
 
-        public IEntityHistoryHelper<EntityEntry, TEntityChangeSet> EntityHistoryHelper { get; set; }
+        public IEntityHistoryHelper<EntityEntry, TEntityChangeSet> EntityHistoryHelper { protected get; set; }
 
         public override int SaveChanges()
         {
@@ -98,8 +98,8 @@ namespace EntityHistory.EntityFrameworkCore.Identity
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TKey>());
-            modelBuilder.ApplyConfiguration(new EntityChangeConfig<TEntityChange, TKey>());
-            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<TEntityPropertyChange, TKey>());
+            modelBuilder.ApplyConfiguration(new EntityChangeConfig<TEntityChange>());
+            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<TEntityPropertyChange>());
         }
     }
 }

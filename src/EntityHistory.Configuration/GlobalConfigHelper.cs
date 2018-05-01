@@ -10,18 +10,18 @@ namespace EntityHistory.Configuration
 {
     public static class GlobalConfigHelper
     {
-        private static readonly Dictionary<Type, EntitySettingsContainer> CurrentConfig = new Dictionary<Type, EntitySettingsContainer>();
+        private static readonly Dictionary<Type, EntityConfigContainer> CurrentConfig = new Dictionary<Type, EntityConfigContainer>();
 
         [CanBeNull]
-        public static EntitySettingsContainer GetEntitySettingsContainer<TEntity>()
+        public static EntityConfigContainer GetEntityConfigContainer<TEntity>()
         {
-            return GetEntitySettingsContainer(typeof(TEntity));
+            return GetEntityConfigContainer(typeof(TEntity));
         }
 
         [CanBeNull]
-        public static EntitySettingsContainer GetEntitySettingsContainer(Type entityType)
+        public static EntityConfigContainer GetEntityConfigContainer(Type entityType)
         {
-            if (CurrentConfig.TryGetValue(entityType, out EntitySettingsContainer result))
+            if (CurrentConfig.TryGetValue(entityType, out EntityConfigContainer result))
             {
                 return result;
             }
@@ -29,12 +29,12 @@ namespace EntityHistory.Configuration
             return null;
         }
 
-        public static bool IsIncluded<TEntity>(bool defaultValue = false)
+        public static bool IsIncluded<TEntity>(bool defaultValue)
         {
             return IsIncluded(typeof(TEntity), defaultValue);
         }
 
-        public static bool IsIncluded(Type entityType, bool defaultValue = false)
+        public static bool IsIncluded(Type entityType, bool defaultValue)
         {
             if (CurrentConfig.ContainsKey(entityType))
             {
@@ -62,36 +62,17 @@ namespace EntityHistory.Configuration
 
         public static bool IsIncluded(Type entityType, string propertyName, bool defaultValue)
         {
-            var container = GetEntitySettingsContainer(entityType);
+            var container = GetEntityConfigContainer(entityType);
 
-            if (container != null)
+            if (container != null && container.IgnoredProperties.Contains(propertyName))
             {
-                if (container.IgnoredProperties.Contains(propertyName))
-                {
-                    return false;
-                }
-
-                if (!container.FormatProperties.ContainsKey(propertyName)
-                    && !container.OverrideProperties.ContainsKey(propertyName))
-                {
-                    return false;
-                }
+                return false;
             }
 
             var propertyInfo = entityType.GetProperty(propertyName);
             if (propertyInfo != null && propertyInfo.IsDefined(typeof(HistoryIgnoreAttribute), true))
             {
                 return false;
-            }
-
-            var classType = propertyInfo?.DeclaringType;
-            if (classType != null)
-            {
-                if (!classType.GetTypeInfo().IsDefined(typeof(HistoryIncludeAttribute), true) &&
-                    !propertyInfo.IsDefined(typeof(HistoryIncludeAttribute), true))
-                {
-                    return false;
-                }
             }
 
             return defaultValue;
@@ -102,9 +83,9 @@ namespace EntityHistory.Configuration
             CurrentConfig.Remove(typeof(TEntity));
         }
 
-        internal static void SetEntitySetting<TEntity>(Action<IEntitySetting<TEntity>> config)
+        internal static void SetEntityConfig<TEntity>(Action<IEntityConfiguration<TEntity>> config)
         {
-            var entitySettings = new EntitySetting<TEntity>();
+            var entitySettings = new EntityConfiguration<TEntity>();
             config.Invoke(entitySettings);
 
             var entityConfig = EnsureConfigForEntity<TEntity>();
@@ -113,26 +94,26 @@ namespace EntityHistory.Configuration
             entityConfig.FormatProperties = entitySettings.FormatProperties;
         }
 
-        internal static void SetEntitySetting(Type entityType)
+        internal static void SetEntityConfig(Type entityType)
         {
             EnsureConfigForEntity(entityType);
         }
 
         #region Private Methods
 
-        private static EntitySettingsContainer EnsureConfigForEntity<TEntity>()
+        private static EntityConfigContainer EnsureConfigForEntity<TEntity>()
         {
             return EnsureConfigForEntity(typeof(TEntity));
         }
 
-        private static EntitySettingsContainer EnsureConfigForEntity(Type entityType)
+        private static EntityConfigContainer EnsureConfigForEntity(Type entityType)
         {
-            if (CurrentConfig.TryGetValue(entityType, out EntitySettingsContainer value))
+            if (CurrentConfig.TryGetValue(entityType, out EntityConfigContainer value))
             {
                 return value;
             }
 
-            CurrentConfig[entityType] = new EntitySettingsContainer();
+            CurrentConfig[entityType] = new EntityConfigContainer();
             return CurrentConfig[entityType];
         }
 

@@ -44,8 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\IEntityHistoryConfiguration.cs" />
-    <Compile Include="Configuration\IEntitySetting.cs" />
-    <Compile Include="Configuration\ISettingsConfigurator.cs" />
+    <Compile Include="Configuration\IEntityConfiguration.cs" />
+    <Compile Include="Configuration\IEntitiesConfigurator.cs" />
+    <Compile Include="Configuration\IConfigurationModule.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="IEntityHistoryHelper.cs" />
     <Compile Include="IEntityHistoryStore.cs" />
