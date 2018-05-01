@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityHistory.Abstractions"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityHistory.Configuration", "src\EntityHistory.Configuration\EntityHistory.Configuration.csproj", "{42AE285B-F48D-4E07-892E-EEF957F87A8B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EntityHistory.TestBase", "test\EntityHistory.TestBase\EntityHistory.TestBase.csproj", "{4791F9F3-873D-4A01-9157-39F8D9F3A161}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -103,6 +105,10 @@ Global
 		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{42AE285B-F48D-4E07-892E-EEF957F87A8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4791F9F3-873D-4A01-9157-39F8D9F3A161}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4791F9F3-873D-4A01-9157-39F8D9F3A161}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4791F9F3-873D-4A01-9157-39F8D9F3A161}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4791F9F3-873D-4A01-9157-39F8D9F3A161}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -125,6 +131,7 @@ Global
 		{A88F17EB-0816-4CBB-BC95-3679EEC23DBE} = {96197B8E-6AA1-4393-8897-E784F8476036}
 		{C12BD493-647E-4AB7-A42A-31A5C02F9AC9} = {593281B8-6657-4E71-80AD-3CD7ED584979}
 		{42AE285B-F48D-4E07-892E-EEF957F87A8B} = {593281B8-6657-4E71-80AD-3CD7ED584979}
+		{4791F9F3-873D-4A01-9157-39F8D9F3A161} = {B24A93C0-B68F-4CF7-95FF-AB9822A07D54}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D2D09843-C0D5-4D7E-B523-7C23D80CA8B9}

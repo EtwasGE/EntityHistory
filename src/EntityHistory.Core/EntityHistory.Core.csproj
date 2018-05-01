@@ -72,14 +72,15 @@
     <Compile Include="Entities\EntityChangeSet.cs" />
     <Compile Include="Entities\EntityPropertyChange.cs" />
     <Compile Include="EntityChangeType.cs" />
+    <Compile Include="Extensions\CollectionExtensions.cs" />
     <Compile Include="Extensions\JsonExtensions.cs" />
     <Compile Include="Extensions\ObjectExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Helpers\Check.cs" />
     <Compile Include="History\EntityHistoryHelperBase.cs" />
     <Compile Include="History\NullEntityHistoryStore.cs" />
     <Compile Include="Extensions\EntityHistoryHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SelectorList.cs" />
     <Compile Include="Session\ClaimsSession.cs" />
     <Compile Include="Session\DefaultPrincipalAccessor.cs" />
     <Compile Include="Session\NullSession.cs" />

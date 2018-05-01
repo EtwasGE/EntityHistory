@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using EntityHistory.Core.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Extensions
@@ -17,6 +18,8 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
 
         public static string GetPrimaryKeyValue(this EntityEntry entityEntry)
         {
+            // TODO: add
+
             //var entity = entityEntry.Entity as IEntity<TKey>;
             //if (entity != null)
             //{
@@ -24,7 +27,7 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
             //}
 
             var primaryKey = entityEntry.Metadata.FindPrimaryKey();
-
+            //return primaryKey.To<string>();
             return string.Empty;
             //return entityAsObj
             //    .GetType().GetProperty("Id")?
