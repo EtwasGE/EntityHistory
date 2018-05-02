@@ -14,7 +14,7 @@ namespace EntityHistory.TestBase
 
         protected bool IsDisposed;
 
-        private readonly IList<Type> _registerModuleTypes;
+        private readonly List<Type> _registerModuleTypes;
 
         private Bootstrapper([NotNull] Type startupModule, [CanBeNull] Action<BootstrapperOptions> optionsAction = null)
         {
@@ -25,20 +25,10 @@ namespace EntityHistory.TestBase
             var options = new BootstrapperOptions();
             optionsAction?.Invoke(options);
             
-            if (!typeof(IModule).GetTypeInfo().IsAssignableFrom(startupModule))
-            {
-                throw new ArgumentException($"{nameof(startupModule)} should be derived from {nameof(IModule)}.");
-            }
-
             _registerModuleTypes.Add(startupModule);
 
             if (options.BaseModule != null)
             {
-                if (!typeof(IModule).GetTypeInfo().IsAssignableFrom(options.BaseModule))
-                {
-                    throw new ArgumentException($"{nameof(options.BaseModule)} should be derived from {nameof(IModule)}.");
-                }
-
                 _registerModuleTypes.Add(options.BaseModule);
             }
         }
@@ -60,6 +50,11 @@ namespace EntityHistory.TestBase
 
             foreach (var moduleType in _registerModuleTypes)
             {
+                if (!typeof(IModule).GetTypeInfo().IsAssignableFrom(moduleType))
+                {
+                    throw new ArgumentException($"{nameof(moduleType)} should be derived from {nameof(IModule)}.");
+                }
+
                 var assembly = Assembly.GetAssembly(moduleType);
                 builder.RegisterAssemblyModules(moduleType, assembly);
             }
