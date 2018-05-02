@@ -1,6 +1,6 @@
 ﻿using Autofac;
-using EntityHistory.Configuration;
 using EntityHistory.EntityFrameworkCore.Common;
+using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using EntityHistory.EntityFrameworkCore.Tests.Ef;
 using EntityHistory.EntityFrameworkCore.Tests.EntityHistory;
 using Microsoft.Data.Sqlite;
@@ -14,7 +14,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests
         {
             RegisterBloggingDbContextToSqliteInMemoryDb(builder);
 
-            builder.RegisterType<EntityHistoryConfiguration>()
+            builder.RegisterType<BloggingEntityHistoryConfiguration>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -23,20 +23,13 @@ namespace EntityHistory.EntityFrameworkCore.Tests
 
             builder.RegisterType<EntityHistoryHelper>()
                 .AsImplementedInterfaces()
-                .PropertiesAutowired();
+                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
+                .InstancePerLifetimeScope();
 
             builder.RegisterType<BloggingDbContext>()
                 .AsSelf()
-                .As<IEntityHistoryDbContext>()
+                .As<IDbContext>()
                 .PropertiesAutowired();
-
-            builder.RegisterType<BloggingDbContext>()
-                .OnActivated(x =>
-                {
-                    var config = new BlogEntityHistoryConfiguration();
-                    x.Instance.EntityHistoryHelper = new EntityHistoryHelper(config);
-                })
-                .Named<BloggingDbContext>("BloggingDbContext_with_BlogEntityHistoryConfiguration");
         }
 
         private static void RegisterBloggingDbContextToSqliteInMemoryDb(ContainerBuilder builder)

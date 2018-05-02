@@ -8,6 +8,7 @@ using EntityHistory.Core.Entities;
 using EntityHistory.Core.Extensions;
 using EntityHistory.Core.History;
 using EntityHistory.EntityFrameworkCore.Common.Extensions;
+using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -42,7 +43,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
     }
     
     public class EntityHistoryHelper<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey>
-        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TEntityChange, TUserKey>
+        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TEntityChange, TUserKey>, IEntityHistoryHelper<TEntityChangeSet>
         where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
         where TEntityChange : EntityChange, new()
         where TEntityPropertyChange : EntityPropertyChange, new()
@@ -156,8 +157,8 @@ namespace EntityHistory.EntityFrameworkCore.Common
                 {
                     propertyChanges.Add(new TEntityPropertyChange
                     {
-                        NewValue = isDeleted ? null : propertyEntry.CurrentValue.ToJsonString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength),
-                        OriginalValue = isCreated ? null : propertyEntry.OriginalValue.ToJsonString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength),
+                        NewValue = isDeleted ? null : propertyEntry.CurrentValue.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength), //ToJsonString()
+                        OriginalValue = isCreated ? null : propertyEntry.OriginalValue.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength), //ToJsonString()
                         PropertyName = property.Name,
                         PropertyTypeFullName = property.ClrType.FullName
                     });
@@ -196,8 +197,8 @@ namespace EntityHistory.EntityFrameworkCore.Common
                                 // Add foreign key
                                 entityChange.PropertyChanges.Add(new TEntityPropertyChange
                                 {
-                                    NewValue = propertyEntry.CurrentValue.ToJsonString(),
-                                    OriginalValue = propertyEntry.OriginalValue.ToJsonString(),
+                                    NewValue = propertyEntry.CurrentValue.ToString(), ////ToJsonString()
+                                    OriginalValue = propertyEntry.OriginalValue.ToString(), ////ToJsonString()
                                     PropertyName = property.Name,
                                     PropertyTypeFullName = property.ClrType.FullName
                                 });
@@ -208,7 +209,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
 
                         if (propertyChange.OriginalValue == propertyChange.NewValue)
                         {
-                            var newValue = propertyEntry.CurrentValue.ToJsonString();
+                            var newValue = propertyEntry.CurrentValue.ToString(); //ToJsonString()
                             if (newValue == propertyChange.NewValue)
                             {
                                 // No change

@@ -101,7 +101,8 @@
     <Compile Include="EntityHistoryHelper.cs" />
     <Compile Include="EntityHistoryStore.cs" />
     <Compile Include="Extensions\EntityEntryExtensions.cs" />
-    <Compile Include="IEntityHistoryDbContext.cs" />
+    <Compile Include="Interfaces\IDbContext.cs" />
+    <Compile Include="Interfaces\IEntityHistoryHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

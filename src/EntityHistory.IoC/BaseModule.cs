@@ -2,9 +2,9 @@
 using EntityHistory.Abstractions.Session;
 using EntityHistory.Core.Session;
 
-namespace EntityHistory.TestBase
+namespace EntityHistory.IoC
 {
-    public class IntegratedTestModule : Module
+    internal sealed class BaseModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {

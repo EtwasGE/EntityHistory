@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4791F9F3-873D-4A01-9157-39F8D9F3A161}</ProjectGuid>
+    <ProjectGuid>{81C18945-61F6-416F-9702-874EEBEC2B4A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EntityHistory.TestBase</RootNamespace>
-    <AssemblyName>EntityHistory.TestBase</AssemblyName>
+    <RootNamespace>EntityHistory.IoC</RootNamespace>
+    <AssemblyName>EntityHistory.IoC</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,12 +37,7 @@
       <HintPath>..\..\packages\JetBrains.Annotations.11.1.0\lib\net20\JetBrains.Annotations.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,24 +46,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IntegratedTestBase.cs" />
+    <Compile Include="BaseModule.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="BootstrapperOptions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\EntityHistory.Abstractions\EntityHistory.Abstractions.csproj">
+    <ProjectReference Include="..\EntityHistory.Abstractions\EntityHistory.Abstractions.csproj">
       <Project>{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}</Project>
       <Name>EntityHistory.Abstractions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\EntityHistory.Core\EntityHistory.Core.csproj">
+    <ProjectReference Include="..\EntityHistory.Core\EntityHistory.Core.csproj">
       <Project>{6A8D2E48-A827-4D4F-9EF3-B80204429004}</Project>
       <Name>EntityHistory.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\EntityHistory.IoC\EntityHistory.IoC.csproj">
-      <Project>{81C18945-61F6-416F-9702-874EEBEC2B4A}</Project>
-      <Name>EntityHistory.IoC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

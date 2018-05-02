@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Autofac;
 using Autofac.Core;
 using EntityHistory.Core.Helpers;
 using JetBrains.Annotations;
 
-namespace EntityHistory.TestBase
+namespace EntityHistory.IoC
 {
     public class Bootstrapper : IDisposable
     {
@@ -14,23 +13,21 @@ namespace EntityHistory.TestBase
 
         protected bool IsDisposed;
 
-        private readonly List<Type> _registerModuleTypes;
+        private readonly Type _startupModuleType;
 
         private Bootstrapper([NotNull] Type startupModule, [CanBeNull] Action<BootstrapperOptions> optionsAction = null)
         {
-            _registerModuleTypes = new List<Type>();
-
             Check.NotNull(startupModule, nameof(startupModule));
 
             var options = new BootstrapperOptions();
             optionsAction?.Invoke(options);
-            
-            _registerModuleTypes.Add(startupModule);
 
-            if (options.BaseModule != null)
+            if (!typeof(IModule).GetTypeInfo().IsAssignableFrom(startupModule))
             {
-                _registerModuleTypes.Add(options.BaseModule);
+                throw new ArgumentException($"{nameof(startupModule)} should be derived from {nameof(IModule)}.");
             }
+
+            _startupModuleType = startupModule;
         }
 
         public static Bootstrapper Create<TStartupModule>([CanBeNull] Action<BootstrapperOptions> optionsAction = null)
@@ -48,20 +45,14 @@ namespace EntityHistory.TestBase
         {
             var builder = new ContainerBuilder();
 
-            foreach (var moduleType in _registerModuleTypes)
-            {
-                if (!typeof(IModule).GetTypeInfo().IsAssignableFrom(moduleType))
-                {
-                    throw new ArgumentException($"{nameof(moduleType)} should be derived from {nameof(IModule)}.");
-                }
+            builder.RegisterModule<BaseModule>();
 
-                var assembly = Assembly.GetAssembly(moduleType);
-                builder.RegisterAssemblyModules(moduleType, assembly);
-            }
-
+            var startupModuleAssembly = Assembly.GetAssembly(_startupModuleType);
+            builder.RegisterAssemblyModules(_startupModuleType, startupModuleAssembly);
+            
             Container = builder.Build();
         }
-        
+
         public virtual void Dispose()
         {
             if (IsDisposed)

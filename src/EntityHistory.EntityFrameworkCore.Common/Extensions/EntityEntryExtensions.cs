@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using EntityHistory.Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
@@ -28,7 +27,7 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
 
                 if (propertyEntry != null)
                 {
-                    return propertyEntry.CurrentValue.ToJsonString();
+                    return propertyEntry.CurrentValue.ToString(); //ToJsonString()
                 }
             }
 

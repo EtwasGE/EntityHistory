@@ -2,17 +2,15 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.Extensions;
-using EntityHistory.EntityFrameworkCore.Common;
 using EntityHistory.EntityFrameworkCore.Common.Configurations;
+using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore
 {
-    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey> : DbContext, IEntityHistoryDbContext
+    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey> : DbContext, IDbContext
         where TEntityChangeSet : EntityChangeSet<TUserKey>
         where TEntityChange : EntityChange
         where TEntityPropertyChange : EntityPropertyChange
@@ -44,7 +42,7 @@ namespace EntityHistory.EntityFrameworkCore
         /// </summary>
         public virtual DbSet<TEntityPropertyChange> EntityPropertyChanges { get; set; }
 
-        public IEntityHistoryHelper<EntityEntry, TEntityChangeSet> EntityHistoryHelper { protected get; set; }
+        public IEntityHistoryHelper<TEntityChangeSet> EntityHistoryHelper { protected get; set; }
 
         public override int SaveChanges()
         {

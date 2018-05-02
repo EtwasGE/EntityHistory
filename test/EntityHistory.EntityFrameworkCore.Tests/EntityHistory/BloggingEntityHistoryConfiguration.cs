@@ -4,9 +4,9 @@ using EntityHistory.EntityFrameworkCore.Tests.Domain;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.EntityHistory
 {
-    public class BlogEntityHistoryConfiguration : EntityHistoryConfiguration
+    public class BloggingEntityHistoryConfiguration : EntityHistoryConfiguration
     {
-        public BlogEntityHistoryConfiguration()
+        public BloggingEntityHistoryConfiguration()
         {
             IsEnabledForAnonymousUsers = true;
         }

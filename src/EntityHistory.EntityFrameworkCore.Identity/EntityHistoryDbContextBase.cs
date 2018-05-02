@@ -2,19 +2,18 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.Extensions;
 using EntityHistory.EntityFrameworkCore.Common.Configurations;
+using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Identity
 {
     public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
-        : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
+        : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>, IDbContext
         where TEntityChangeSet : EntityChangeSet<TKey, TUser>
         where TEntityChange : EntityChange
         where TEntityPropertyChange : EntityPropertyChange
@@ -53,7 +52,7 @@ namespace EntityHistory.EntityFrameworkCore.Identity
         /// </summary>
         public virtual DbSet<TEntityPropertyChange> EntityPropertyChanges { get; set; }
 
-        public IEntityHistoryHelper<EntityEntry, TEntityChangeSet> EntityHistoryHelper { protected get; set; }
+        public IEntityHistoryHelper<TEntityChangeSet> EntityHistoryHelper { protected get; set; }
 
         public override int SaveChanges()
         {

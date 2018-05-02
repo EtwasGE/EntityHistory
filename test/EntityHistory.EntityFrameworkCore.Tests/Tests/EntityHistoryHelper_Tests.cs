@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Autofac;
+using EntityHistory.Core;
 using EntityHistory.EntityFrameworkCore.Tests.Ef;
 using Shouldly;
 using Xunit;
@@ -11,7 +12,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
         [Fact]
         public void Change_Blog_Name_Test()
         {
-            var context = Container.ResolveNamed<BloggingDbContext>("BloggingDbContext_with_BlogEntityHistoryConfiguration");
+            var context = Container.Resolve<BloggingDbContext>();
 
             var blog = context.Blogs.First();
             var oldName = blog.Name;
@@ -20,13 +21,15 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
 
             context.SaveChanges();
 
-            var allEntityPropertyChanges = context.EntityPropertyChanges.ToList();
+            var allUpdatedPropertyChanges = context.EntityChanges
+                .Where(x=>x.ChangeType == EntityChangeType.Updated)
+                .SelectMany(x=>x.PropertyChanges).ToList();
             
-            var urlProperty = allEntityPropertyChanges.FirstOrDefault(x => x.PropertyName == "Url");
+            var urlProperty = allUpdatedPropertyChanges.FirstOrDefault(x => x.PropertyName == nameof(blog.Url));
             urlProperty.ShouldBeNull();
 
-            var nameProperty = allEntityPropertyChanges.SingleOrDefault(x =>
-                x.PropertyName == "Name"
+            var nameProperty = allUpdatedPropertyChanges.SingleOrDefault(x =>
+                x.PropertyName == nameof(blog.Name)
                 && x.OriginalValue == oldName
                 && x.NewValue == blog.Name); //"МИР ТРУД МАЙ"
 

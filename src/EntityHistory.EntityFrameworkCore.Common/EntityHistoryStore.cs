@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using EntityHistory.Abstractions;
+using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 
 namespace EntityHistory.EntityFrameworkCore.Common
 {
     public class EntityHistoryStore : IEntityHistoryStore
     {
-        private readonly IEntityHistoryDbContext _context;
+        private readonly IDbContext _context;
 
-        public EntityHistoryStore(IEntityHistoryDbContext context)
+        public EntityHistoryStore(IDbContext context)
         {
             _context = context;
         }

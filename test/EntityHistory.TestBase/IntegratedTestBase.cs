@@ -2,6 +2,7 @@
 using Autofac;
 using Autofac.Core;
 using EntityHistory.Abstractions.Session;
+using EntityHistory.IoC;
 
 namespace EntityHistory.TestBase
 {
@@ -19,10 +20,7 @@ namespace EntityHistory.TestBase
 
         protected IntegratedTestBase(bool initialize = true)
         {
-            Bootstrapper = Bootstrapper.Create<TStartupModule>(options =>
-            {
-                options.BaseModule = typeof(IntegratedTestModule);
-            });
+            Bootstrapper = Bootstrapper.Create<TStartupModule>();
 
             if (initialize)
             {

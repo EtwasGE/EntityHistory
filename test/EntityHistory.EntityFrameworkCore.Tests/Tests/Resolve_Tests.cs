@@ -3,8 +3,8 @@ using Autofac;
 using EntityHistory.Abstractions;
 using EntityHistory.Abstractions.Configuration;
 using EntityHistory.Core.Entities;
+using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using EntityHistory.EntityFrameworkCore.Tests.Ef;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Xunit;
 using Shouldly;
 
@@ -20,9 +20,6 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
 
             var posts = bloggingDbContext.Posts.ToList();
             posts.Any().ShouldBeTrue();
-
-            var entityChildSets = bloggingDbContext.EntityChangeSets.ToList();
-            entityChildSets.Any().ShouldBeFalse();
         }
 
         [Fact]
@@ -35,7 +32,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
         [Fact]
         public void Should_Resolve_EntityHistoryHelper_If_Registered()
         {
-            Container.TryResolve<IEntityHistoryHelper<EntityEntry, EntityChangeSet<long>>>(out var helper);
+            Container.TryResolve<IEntityHistoryHelper<EntityChangeSet<long>>>(out var helper);
             helper.ShouldNotBeNull();
         }
 
