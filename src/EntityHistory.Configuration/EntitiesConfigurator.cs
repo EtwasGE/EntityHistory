@@ -21,10 +21,11 @@ namespace EntityHistory.Configuration
             GlobalConfigHelper.SetEntityConfig(entityType);
         }
 
-        public void ApplyConfiguration<TEntity>(IConfigurationModule<TEntity> module)
+        public IEntitiesConfigurator ApplyConfiguration<TEntity>(IConfigurationModule<TEntity> module)
         {
             var action = new Action<IEntityConfiguration<TEntity>>(module.Configure);
             GlobalConfigHelper.SetEntityConfig(action);
+            return this;
         }
     }
 }

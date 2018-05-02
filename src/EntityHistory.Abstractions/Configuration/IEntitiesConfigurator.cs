@@ -23,6 +23,6 @@ namespace EntityHistory.Abstractions.Configuration
         /// <summary>
         /// 
         /// </summary>
-        void ApplyConfiguration<TEntity>(IConfigurationModule<TEntity> module);
+        IEntitiesConfigurator ApplyConfiguration<TEntity>(IConfigurationModule<TEntity> module);
     }
 }
