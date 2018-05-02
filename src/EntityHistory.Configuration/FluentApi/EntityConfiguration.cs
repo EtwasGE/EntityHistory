@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using EntityHistory.Abstractions.Configuration;
 
-namespace EntityHistory.Configuration
+namespace EntityHistory.Configuration.FluentApi
 {
     public class EntityConfiguration<TEntity> : IEntityConfiguration<TEntity>
     {
@@ -49,7 +49,20 @@ namespace EntityHistory.Configuration
             FormatProperties[propertyName] = entity => format.Invoke((TProp)entity);
             return this;
         }
-        
+
+        public IEntityConfiguration<TEntity> Format<TProp, TResult>(Expression<Func<TEntity, TProp>> property, Func<TProp, TResult> format)
+        {
+            var name = GetMemberName(property);
+            FormatProperties[name] = entity => format.Invoke((TProp)entity);
+            return this;
+        }
+
+        public IEntityConfiguration<TEntity> Format<TProp, TResult>(string propertyName, Func<TProp, TResult> format)
+        {
+            FormatProperties[propertyName] = entity => format.Invoke((TProp)entity);
+            return this;
+        }
+
         private string GetMemberName<T, TS>(Expression<Func<T, TS>> expression)
         {
             if (!(expression.Body is MemberExpression me))

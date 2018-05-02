@@ -10,10 +10,32 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore
 {
-    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey> : DbContext, IDbContext
+    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TUserKey, TUser>
+        : EntityHistoryDbContextBase<TEntityChangeSet, TUserKey>
+        where TEntityChangeSet : EntityChangeSet<TUserKey, TUser>
+        where TUserKey : struct, IEquatable<TUserKey>
+        where TUser : class
+    {
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
+        protected EntityHistoryDbContextBase(DbContextOptions options) : base(options) { }
+
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        protected EntityHistoryDbContextBase() { }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TUserKey, TUser>());
+        }
+    }
+
+    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TUserKey> : DbContext, IDbContext
         where TEntityChangeSet : EntityChangeSet<TUserKey>
-        where TEntityChange : EntityChange
-        where TEntityPropertyChange : EntityPropertyChange
         where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
@@ -35,12 +57,12 @@ namespace EntityHistory.EntityFrameworkCore
         /// <summary>
         /// Entity changes.
         /// </summary>
-        public virtual DbSet<TEntityChange> EntityChanges { get; set; }
+        public virtual DbSet<EntityChange> EntityChanges { get; set; }
 
         /// <summary>
         /// Entity property changes.
         /// </summary>
-        public virtual DbSet<TEntityPropertyChange> EntityPropertyChanges { get; set; }
+        public virtual DbSet<EntityPropertyChange> EntityPropertyChanges { get; set; }
 
         public IEntityHistoryHelper<TEntityChangeSet> EntityHistoryHelper { protected get; set; }
 
@@ -87,8 +109,8 @@ namespace EntityHistory.EntityFrameworkCore
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TUserKey>());
-            modelBuilder.ApplyConfiguration(new EntityChangeConfig<TEntityChange>());
-            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<TEntityPropertyChange>());
+            modelBuilder.ApplyConfiguration(new EntityChangeConfig<EntityChange>());
+            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<EntityPropertyChange>());
         }
     }
 }

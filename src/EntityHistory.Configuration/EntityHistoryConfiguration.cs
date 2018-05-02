@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using EntityHistory.Abstractions.Configuration;
+using EntityHistory.Configuration.FluentApi;
 using EntityHistory.Core.Entities;
 
 namespace EntityHistory.Configuration
@@ -30,10 +31,10 @@ namespace EntityHistory.Configuration
                 typeof(EntityPropertyChange)
             };
 
-            OnEntityConfig(new EntitiesConfigurator());
+            OnRegistration(new EntitiesConfigurator());
         }
 
-        protected virtual void OnEntityConfig(IEntitiesConfigurator config)
+        protected virtual void OnRegistration(IEntitiesConfigurator config)
         {
         }
     }

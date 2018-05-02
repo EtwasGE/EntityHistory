@@ -1,25 +1,28 @@
-﻿using System.Linq;
-using Autofac;
+﻿using Autofac;
 using EntityHistory.Abstractions;
 using EntityHistory.Abstractions.Configuration;
-using EntityHistory.Core.Entities;
 using EntityHistory.EntityFrameworkCore.Common.Interfaces;
-using EntityHistory.EntityFrameworkCore.Tests.Ef;
+using EntityHistory.EntityFrameworkCore.Tests.BookLibrary;
+using EntityHistory.EntityFrameworkCore.Tests.BookLibrary.Domain;
 using Xunit;
 using Shouldly;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.Tests
 {
-    public class Resolve_Tests : EntityFrameworkCoreTestBase
+    public class BookLibrary_Resolve_Tests : EntityFrameworkCoreTestBase<BookLibraryTestModule>
     {
         [Fact]
-        public void Should_Resolve_BloggerDbContext_If_Registered()
+        public void Should_Resolve_BookLibraryDbContext_If_Registered()
         {
-            Container.TryResolve<BloggingDbContext>(out var bloggingDbContext);
+            Container.TryResolve<BookLibraryDbContext>(out var bloggingDbContext);
             bloggingDbContext.ShouldNotBeNull();
+        }
 
-            var posts = bloggingDbContext.Posts.ToList();
-            posts.Any().ShouldBeTrue();
+        [Fact]
+        public void Should_Resolve_DbContext_If_Registered()
+        {
+            Container.TryResolve<IDbContext>(out var dbContext);
+            dbContext.ShouldNotBeNull();
         }
 
         [Fact]
@@ -32,7 +35,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
         [Fact]
         public void Should_Resolve_EntityHistoryHelper_If_Registered()
         {
-            Container.TryResolve<IEntityHistoryHelper<EntityChangeSet<long>>>(out var helper);
+            Container.TryResolve<IEntityHistoryHelper<CustomEntityChangeSet>>(out var helper);
             helper.ShouldNotBeNull();
         }
 

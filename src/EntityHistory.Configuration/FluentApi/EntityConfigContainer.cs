@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace EntityHistory.Configuration
+namespace EntityHistory.Configuration.FluentApi
 {
     public class EntityConfigContainer
     {

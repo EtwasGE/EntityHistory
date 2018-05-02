@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using EntityHistory.Abstractions.Configuration;
 using EntityHistory.Configuration.Attributes;
+using EntityHistory.Configuration.FluentApi;
 using JetBrains.Annotations;
 
 namespace EntityHistory.Configuration
@@ -29,38 +30,50 @@ namespace EntityHistory.Configuration
             return null;
         }
 
-        public static bool IsIncluded<TEntity>(bool defaultValue)
+        public static bool IsIncluded<TEntity>()
         {
-            return IsIncluded(typeof(TEntity), defaultValue);
+            return IsIncluded(typeof(TEntity));
         }
-
-        public static bool IsIncluded(Type entityType, bool defaultValue)
+        
+        public static bool IsIncluded(Type entityType)
         {
+            if (entityType == null)
+            {
+                return false;
+            }
+
+            // check registration type with fluent API
             if (CurrentConfig.ContainsKey(entityType))
             {
                 return true;
             }
 
+            // check all base types
+            if(IsIncluded(entityType.BaseType))
+            {
+                return true;
+            }
+            
             if (entityType.GetTypeInfo().IsDefined(typeof(HistoryIncludeAttribute), true))
             {
                 return true;
             }
 
             var properties = entityType.GetProperties(BindingFlags.Public | BindingFlags.Instance);
-            if (properties.Any(p => p?.IsDefined(typeof(HistoryIncludeAttribute)) ?? false))
+            if (properties.Any(p => p.IsDefined(typeof(HistoryIgnoreAttribute)) || p.IsDefined(typeof(HistoryOverrideAttribute))))
             {
                 return true;
             }
 
-            return defaultValue;
+            return false;
         }
 
-        public static bool IsIncluded<TEntity>(string propertyName, bool defaultValue)
+        public static bool IsIncluded<TEntity>(string propertyName)
         {
-            return IsIncluded(typeof(TEntity), propertyName, defaultValue);
+            return IsIncluded(typeof(TEntity), propertyName);
         }
 
-        public static bool IsIncluded(Type entityType, string propertyName, bool defaultValue)
+        public static bool IsIncluded(Type entityType, string propertyName)
         {
             var container = GetEntityConfigContainer(entityType);
 
@@ -75,7 +88,46 @@ namespace EntityHistory.Configuration
                 return false;
             }
 
-            return defaultValue;
+            return true;
+        }
+
+        public static bool IsOverridden<TEntity>(string propertyName, out object result)
+        {
+            return IsOverridden(typeof(TEntity), propertyName, out result);
+        }
+
+        public static bool IsOverridden(Type entityType, string propertyName, out object result)
+        {
+            if (CurrentConfig.TryGetValue(entityType, out EntityConfigContainer value))
+            {
+                return value.OverrideProperties.TryGetValue(propertyName, out result);
+            }
+
+            var propertyInfo = entityType.GetProperty(propertyName);
+            if (propertyInfo != null && propertyInfo.IsDefined(typeof(HistoryOverrideAttribute), true))
+            {
+                result = propertyInfo.GetCustomAttribute<HistoryOverrideAttribute>()?.Value;
+                return true;
+            }
+
+            result = null;
+            return false;
+        }
+
+        public static bool IsFormated<TEntity>(string propertyName, out Func<object, object> result)
+        {
+            return IsFormated(typeof(TEntity), propertyName, out result);
+        }
+
+        public static bool IsFormated(Type entityType, string propertyName, out Func<object, object> result)
+        {
+            if (CurrentConfig.TryGetValue(entityType, out EntityConfigContainer value))
+            {
+                return value.FormatProperties.TryGetValue(propertyName, out result);
+            }
+
+            result = null;
+            return false;
         }
 
         public static void Reset<TEntity>()

@@ -22,31 +22,19 @@ namespace EntityHistory.EntityFrameworkCore.Common
         {
         }
     }
-
-    public class EntityHistoryHelper<TUserKey, TUser> : EntityHistoryHelper<EntityChangeSet<TUserKey, TUser>, EntityChange, EntityPropertyChange, TUserKey>
-        where TUserKey : struct, IEquatable<TUserKey>
-        where TUser : class
-    {
-        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
-            : base(configuration)
-        {
-        }
-    }
-
-    public class EntityHistoryHelper<TUserKey> : EntityHistoryHelper<EntityChangeSet<TUserKey>, EntityChange, EntityPropertyChange, TUserKey>
-        where TUserKey : struct, IEquatable<TUserKey>
-    {
-        public EntityHistoryHelper(IEntityHistoryConfiguration configuration) 
-            : base(configuration)
-        {
-        }
-    }
     
-    public class EntityHistoryHelper<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUserKey>
-        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TEntityChange, TUserKey>, IEntityHistoryHelper<TEntityChangeSet>
+    public class EntityHistoryHelper<TUserKey> : EntityHistoryHelper<EntityChangeSet<TUserKey>, TUserKey>
+        where TUserKey : struct, IEquatable<TUserKey>
+    {
+        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
+            : base(configuration)
+        {
+        }
+    }
+
+    public class EntityHistoryHelper<TEntityChangeSet, TUserKey>
+        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TUserKey>, IEntityHistoryHelper<TEntityChangeSet>
         where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
-        where TEntityChange : EntityChange, new()
-        where TEntityPropertyChange : EntityPropertyChange, new()
         where TUserKey : struct, IEquatable<TUserKey>
     {
         public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
@@ -54,10 +42,17 @@ namespace EntityHistory.EntityFrameworkCore.Common
         {
         }
 
-        protected override bool ShouldSaveEntityHistory(EntityEntry entityEntry, bool defaultValue = false)
+        protected override bool ShouldSaveEntityHistory(EntityEntry entityEntry)
         {
             if (entityEntry.State == EntityState.Detached ||
                 entityEntry.State == EntityState.Unchanged)
+            {
+                return false;
+            }
+
+            var entityType = entityEntry.Metadata.ClrType;
+            // check all base types
+            if (IsIgnoredType(entityType))
             {
                 return false;
             }
@@ -67,18 +62,35 @@ namespace EntityHistory.EntityFrameworkCore.Common
                 return false;
             }
 
-            var entityType = entityEntry.Entity.GetType();
             if (!entityType.IsPublic)
             {
                 return false;
             }
-            
-            return GlobalConfigHelper.IsIncluded(entityType, defaultValue);
+
+            return GlobalConfigHelper.IsIncluded(entityType);
+        }
+
+        protected virtual bool IsIgnoredType(Type entityType)
+        {
+            if (entityType == null)
+            {
+                return false;
+            }
+
+            if (entityType.IsGenericType)
+            {
+                var entityGenericTypeDefinition = entityType.GetGenericTypeDefinition();
+                if (Configuration.IgnoredTypes.Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == entityGenericTypeDefinition))
+                {
+                    return true;
+                }
+            }
+
+            return IsIgnoredType(entityType.BaseType);
         }
 
         protected virtual bool ShouldSavePropertyHistory(PropertyEntry propertyEntry, bool defaultValue)
         {
-            //TODO check
             if (propertyEntry.Metadata.IsPrimaryKey())
             {
                 return false;
@@ -87,7 +99,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
             var entityType = propertyEntry.EntityEntry.Entity.GetType();
             var propertyName = propertyEntry.Metadata.Name;
 
-            if(!GlobalConfigHelper.IsIncluded(entityType, propertyName, true))
+            if (!GlobalConfigHelper.IsIncluded(entityType, propertyName))
             {
                 return false;
             };
@@ -101,7 +113,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
         }
 
         [CanBeNull]
-        protected override TEntityChange GetEntityChange(EntityEntry entityEntry)
+        protected override EntityChange GetEntityChange(EntityEntry entityEntry)
         {
             var entity = entityEntry.Entity;
 
@@ -131,7 +143,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
 
             var entityType = entity.GetType();
 
-            var entityChange = new TEntityChange
+            var entityChange = new EntityChange
             {
                 ChangeType = changeType,
                 EntityEntry = entityEntry,
@@ -143,9 +155,9 @@ namespace EntityHistory.EntityFrameworkCore.Common
             return entityChange;
         }
 
-        protected virtual IEnumerable<TEntityPropertyChange> GetPropertyChanges(EntityEntry entityEntry)
+        protected virtual IEnumerable<EntityPropertyChange> GetPropertyChanges(EntityEntry entityEntry)
         {
-            var propertyChanges = new List<TEntityPropertyChange>();
+            var propertyChanges = new List<EntityPropertyChange>();
             var properties = entityEntry.Metadata.GetProperties();
             var isCreated = entityEntry.IsCreated();
             var isDeleted = entityEntry.IsDeleted();
@@ -155,10 +167,10 @@ namespace EntityHistory.EntityFrameworkCore.Common
                 var propertyEntry = entityEntry.Property(property.Name);
                 if (ShouldSavePropertyHistory(propertyEntry, isCreated || isDeleted))
                 {
-                    propertyChanges.Add(new TEntityPropertyChange
+                    propertyChanges.Add(new EntityPropertyChange
                     {
-                        NewValue = isDeleted ? null : propertyEntry.CurrentValue.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength), //ToJsonString()
-                        OriginalValue = isCreated ? null : propertyEntry.OriginalValue.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength), //ToJsonString()
+                        NewValue = isDeleted ? null : propertyEntry.GetCurrentValue(),
+                        OriginalValue = isCreated ? null : propertyEntry.GetOriginalValue(),
                         PropertyName = property.Name,
                         PropertyTypeFullName = property.ClrType.FullName
                     });
@@ -195,10 +207,10 @@ namespace EntityHistory.EntityFrameworkCore.Common
                             if (propertyEntry.IsModified)
                             {
                                 // Add foreign key
-                                entityChange.PropertyChanges.Add(new TEntityPropertyChange
+                                entityChange.PropertyChanges.Add(new EntityPropertyChange
                                 {
-                                    NewValue = propertyEntry.CurrentValue.ToString(), ////ToJsonString()
-                                    OriginalValue = propertyEntry.OriginalValue.ToString(), ////ToJsonString()
+                                    NewValue = propertyEntry.CurrentValue.ToString(),
+                                    OriginalValue = propertyEntry.OriginalValue.ToString(),
                                     PropertyName = property.Name,
                                     PropertyTypeFullName = property.ClrType.FullName
                                 });
@@ -209,7 +221,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
 
                         if (propertyChange.OriginalValue == propertyChange.NewValue)
                         {
-                            var newValue = propertyEntry.CurrentValue.ToString(); //ToJsonString()
+                            var newValue = propertyEntry.CurrentValue.ToString();
                             if (newValue == propertyChange.NewValue)
                             {
                                 // No change

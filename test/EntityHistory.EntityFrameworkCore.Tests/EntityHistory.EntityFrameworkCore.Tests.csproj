@@ -134,15 +134,28 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Domain\Blog.cs" />
-    <Compile Include="Domain\Post.cs" />
-    <Compile Include="Ef\BloggingDbContext.cs" />
+    <Compile Include="Blogging\Domain\Blog.cs" />
+    <Compile Include="Blogging\Domain\Comment.cs" />
+    <Compile Include="Blogging\Domain\Post.cs" />
+    <Compile Include="Blogging\BloggingDbContext.cs" />
+    <Compile Include="BookLibrary\BookLibraryTestModule.cs" />
+    <Compile Include="BookLibrary\BookLibraryDbContext.cs" />
+    <Compile Include="BookLibrary\BookLibraryEntityHistoryConfiguration.cs" />
+    <Compile Include="BookLibrary\BookLibraryEntityHistoryHelper.cs" />
+    <Compile Include="BookLibrary\Domain\Author.cs" />
+    <Compile Include="BookLibrary\Domain\Book.cs" />
+    <Compile Include="BookLibrary\Domain\CustomEntityChangeSet.cs" />
+    <Compile Include="BookLibrary\Domain\Tag.cs" />
+    <Compile Include="BookLibrary\Domain\User.cs" />
     <Compile Include="EntityFrameworkCoreTestBase.cs" />
-    <Compile Include="EntityFrameworkCoreTestModule.cs" />
-    <Compile Include="EntityHistory\BloggingEntityHistoryConfiguration.cs" />
+    <Compile Include="Blogging\BloggingTestModule.cs" />
+    <Compile Include="EntityFrameworkCoreTestModuleBase.cs" />
+    <Compile Include="Blogging\BloggingEntityHistoryConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\EntityHistoryHelper_Tests.cs" />
-    <Compile Include="Tests\Resolve_Tests.cs" />
+    <Compile Include="Tests\BookLibrary_AttributeConfiguration_Tests.cs" />
+    <Compile Include="Tests\Blogging_FluentApiConfiguration_Tests.cs" />
+    <Compile Include="Tests\BookLibrary_Resolve_Tests.cs" />
+    <Compile Include="Tests\Blogging_Resolve_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

@@ -12,11 +12,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore.Identity
 {
-    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TEntityChange, TEntityPropertyChange, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
+    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
         : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>, IDbContext
         where TEntityChangeSet : EntityChangeSet<TKey, TUser>
-        where TEntityChange : EntityChange
-        where TEntityPropertyChange : EntityPropertyChange
         where TUser : IdentityUser<TKey>
         where TRole : IdentityRole<TKey>
         where TKey : struct, IEquatable<TKey>
@@ -45,12 +43,12 @@ namespace EntityHistory.EntityFrameworkCore.Identity
         /// <summary>
         /// Entity changes.
         /// </summary>
-        public virtual DbSet<TEntityChange> EntityChanges { get; set; }
+        public virtual DbSet<EntityChange> EntityChanges { get; set; }
 
         /// <summary>
         /// Entity property changes.
         /// </summary>
-        public virtual DbSet<TEntityPropertyChange> EntityPropertyChanges { get; set; }
+        public virtual DbSet<EntityPropertyChange> EntityPropertyChanges { get; set; }
 
         public IEntityHistoryHelper<TEntityChangeSet> EntityHistoryHelper { protected get; set; }
 
@@ -97,8 +95,8 @@ namespace EntityHistory.EntityFrameworkCore.Identity
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TKey>());
-            modelBuilder.ApplyConfiguration(new EntityChangeConfig<TEntityChange>());
-            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<TEntityPropertyChange>());
+            modelBuilder.ApplyConfiguration(new EntityChangeConfig<EntityChange>());
+            modelBuilder.ApplyConfiguration(new EntityPropertyChangeConfig<EntityPropertyChange>());
         }
     }
 }

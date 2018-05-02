@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityHistory.Abstractions;
 using EntityHistory.Core.Helpers;
 
-namespace EntityHistory.EntityFrameworkCore.Tests.Domain
+namespace EntityHistory.EntityFrameworkCore.Tests.Blogging.Domain
 {
-    public class Blog : IEntity<Guid>
+    public class Blog 
     {
         public Blog()
         {
@@ -23,10 +22,12 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Domain
         }
 
         public Guid Id { get; set; }
-
+        
         public string Name { get; set; }
-
+        
         public string Url { get; set; }
+
+        public int Raiting { get; set; }
 
         public ICollection<Post> Posts { get; set; }
     }

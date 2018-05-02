@@ -1,52 +1,29 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Autofac;
-using EntityHistory.EntityFrameworkCore.Tests.Domain;
-using EntityHistory.EntityFrameworkCore.Tests.Ef;
+using Autofac.Core;
 using EntityHistory.TestBase;
+using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore.Tests
 {
-    public abstract class EntityFrameworkCoreTestBase : IntegratedTestBase<EntityFrameworkCoreTestModule>
+    public abstract class EntityFrameworkCoreTestBase<TStartModule> : IntegratedTestBase<TStartModule>
+        where TStartModule: IModule
     {
-        protected EntityFrameworkCoreTestBase()
+        public void UsingDbContext<TContext>(Action<TContext> action) where TContext : DbContext
         {
-            CreateInitialData();
-        }
-
-        private void CreateInitialData()
-        {
-            UsingDbContext(
-                context =>
-                {
-                    var blog1 = new Blog("test-blog-1", "http://testblog1.myblogs.com");
-
-                    context.Blogs.Add(blog1);
-                    context.SaveChanges();
-
-                    var post1 = new Post { Blog = blog1, Title = "test-post-1-title", Body = "test-post-1-body" };
-                    var post2 = new Post { Blog = blog1, Title = "test-post-2-title", Body = "test-post-2-body" };
-                    var post3 = new Post { Blog = blog1, Title = "test-post-3-title", Body = "test-post-3-body" };
-                    var post4 = new Post { Blog = blog1, Title = "test-post-4-title", Body = "test-post-4-body" };
-
-                    context.Posts.AddRange(post1, post2, post3, post4);
-                });
-        }
-
-        public void UsingDbContext(Action<BloggingDbContext> action)
-        {
-            using (var context = Container.Resolve<BloggingDbContext>())
+            using (var context = Container.Resolve<TContext>())
             {
                 action(context);
                 context.SaveChanges();
             }
         }
 
-        public T UsingDbContext<T>(Func<BloggingDbContext, T> func)
+        public T UsingDbContext<TContext, T>(Func<TContext, T> func) where TContext : DbContext
         {
             T result;
 
-            using (var context = Container.Resolve<BloggingDbContext>())
+            using (var context = Container.Resolve<TContext>())
             {
                 result = func(context);
                 context.SaveChanges();
@@ -55,20 +32,20 @@ namespace EntityHistory.EntityFrameworkCore.Tests
             return result;
         }
 
-        public async Task UsingDbContextAsync(Func<BloggingDbContext, Task> action)
+        public async Task UsingDbContextAsync<TContext>(Func<TContext, Task> action) where TContext : DbContext
         {
-            using (var context = Container.Resolve<BloggingDbContext>())
+            using (var context = Container.Resolve<TContext>())
             {
                 await action(context);
                 await context.SaveChangesAsync(true);
             }
         }
 
-        public async Task<T> UsingDbContextAsync<T>(Func<BloggingDbContext, Task<T>> func)
+        public async Task<T> UsingDbContextAsync<TContext, T>(Func<TContext, Task<T>> func) where TContext : DbContext
         {
             T result;
 
-            using (var context = Container.Resolve<BloggingDbContext>())
+            using (var context = Container.Resolve<TContext>())
             {
                 result = await func(context);
                 context.SaveChanges();

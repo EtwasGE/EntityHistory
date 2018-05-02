@@ -1,7 +1,7 @@
 ﻿using System;
 using EntityHistory.Abstractions.Configuration;
 
-namespace EntityHistory.Configuration
+namespace EntityHistory.Configuration.FluentApi
 {
     public class EntitiesConfigurator : IEntitiesConfigurator
     {

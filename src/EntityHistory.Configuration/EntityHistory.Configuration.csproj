@@ -45,11 +45,12 @@
   <ItemGroup>
     <Compile Include="Attributes\HistoryIgnoreAttribute.cs" />
     <Compile Include="Attributes\HistoryIncludeAttribute.cs" />
-    <Compile Include="EntityConfigContainer.cs" />
+    <Compile Include="Attributes\HistoryOverrideAttribute.cs" />
+    <Compile Include="FluentApi\EntityConfigContainer.cs" />
     <Compile Include="EntityHistoryConfiguration.cs" />
-    <Compile Include="EntityConfiguration.cs" />
+    <Compile Include="FluentApi\EntityConfiguration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EntitiesConfigurator.cs" />
+    <Compile Include="FluentApi\EntitiesConfigurator.cs" />
     <Compile Include="GlobalConfigHelper.cs" />
   </ItemGroup>
   <ItemGroup>

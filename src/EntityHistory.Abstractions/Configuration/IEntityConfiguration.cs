@@ -50,5 +50,9 @@ namespace EntityHistory.Abstractions.Configuration
         /// <param name="propertyName">The entity's property name (case sensitive)</param>
         /// <param name="format">A function of the current value that returns the value to override</param>
         IEntityConfiguration<TEntity> Format<TProp>(string propertyName, Func<TProp, TProp> format);
+
+        IEntityConfiguration<TEntity> Format<TProp, TResult>(Expression<Func<TEntity, TProp>> property, Func<TProp, TResult> format);
+
+        IEntityConfiguration<TEntity> Format<TProp, TResult>(string propertyName, Func<TProp, TResult> format);
     }
 }

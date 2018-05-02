@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using EntityHistory.Abstractions;
 
-namespace EntityHistory.EntityFrameworkCore.Tests.Domain
+namespace EntityHistory.EntityFrameworkCore.Tests.Blogging.Domain
 {
-    public class Post : IEntity<Guid>
+    public class Post 
     {
         public Post()
         {

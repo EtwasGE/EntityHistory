@@ -14,10 +14,9 @@ using JetBrains.Annotations;
 
 namespace EntityHistory.Core.History
 {
-    public abstract class EntityHistoryHelperBase<TEntityEntry, TEntityChangeSet, TEntityChange, TUserKey>
+    public abstract class EntityHistoryHelperBase<TEntityEntry, TEntityChangeSet, TUserKey>
         : IEntityHistoryHelper<TEntityEntry, TEntityChangeSet>
         where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
-        where TEntityChange : EntityChange
         where TUserKey : struct, IEquatable<TUserKey>
     {
         public ISession<TUserKey> Session { protected get; set; }
@@ -35,8 +34,8 @@ namespace EntityHistory.Core.History
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
 
-        protected abstract bool ShouldSaveEntityHistory(TEntityEntry entityEntry, bool defaultValue = false);
-        protected abstract TEntityChange GetEntityChange(TEntityEntry entityEntry);
+        protected abstract bool ShouldSaveEntityHistory(TEntityEntry entityEntry);
+        protected abstract EntityChange GetEntityChange(TEntityEntry entityEntry);
         protected abstract void UpdateChangeSet(TEntityChangeSet entityChangeSet);
 
         protected bool IsEntityHistoryEnabled
