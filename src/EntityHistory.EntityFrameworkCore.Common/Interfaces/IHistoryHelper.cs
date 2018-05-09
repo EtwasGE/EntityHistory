@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Interfaces
 {
-    public interface IEntityHistoryHelper<TEntityChangeSet> : IEntityHistoryHelper<EntityEntry, TEntityChangeSet>
+    public interface IHistoryHelper<TEntityChangeSet> : IHistoryHelper<EntityEntry, TEntityChangeSet>
     {
     }
 }

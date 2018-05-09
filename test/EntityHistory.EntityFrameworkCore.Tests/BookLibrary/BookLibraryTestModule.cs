@@ -1,5 +1,7 @@
 ﻿using Autofac;
+using EntityHistory.EntityFrameworkCore.Common;
 using EntityHistory.EntityFrameworkCore.Common.Interfaces;
+using EntityHistory.EntityFrameworkCore.Tests.BookLibrary.Domain;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.BookLibrary
 {
@@ -12,7 +14,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests.BookLibrary
             var options = GetDbContextOptions<BookLibraryDbContext>(builder);
             var isCreated = new BookLibraryDbContext(options).Database.EnsureCreated();
 
-            builder.RegisterType<BookLibraryEntityHistoryConfiguration>()
+            builder.RegisterType<BookLibraryHistoryConfiguration>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -21,10 +23,13 @@ namespace EntityHistory.EntityFrameworkCore.Tests.BookLibrary
                 .As<IDbContext>()
                 .PropertiesAutowired();
 
-            builder.RegisterType<BookLibraryEntityHistoryHelper>()
+            builder.RegisterType<BookLibraryHistoryHelper>()
                 .AsImplementedInterfaces()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<HistoryDbContextHelper<CustomEntityChangeSet, long>>()
+                .AsImplementedInterfaces();
         }
     }
 }

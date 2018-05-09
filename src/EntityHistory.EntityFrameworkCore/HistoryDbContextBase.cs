@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
-using EntityHistory.Core.Extensions;
+using EntityHistory.Core.History;
 using EntityHistory.EntityFrameworkCore.Common.Configurations;
 using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore
 {
-    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TUserKey, TUser>
-        : EntityHistoryDbContextBase<TEntityChangeSet, TUserKey>
+    public abstract class HistoryDbContextBase<TEntityChangeSet, TUserKey, TUser>
+        : HistoryDbContextBase<TEntityChangeSet, TUserKey>
         where TEntityChangeSet : EntityChangeSet<TUserKey, TUser>
         where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
@@ -20,12 +20,12 @@ namespace EntityHistory.EntityFrameworkCore
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        protected EntityHistoryDbContextBase(DbContextOptions options) : base(options) { }
+        protected HistoryDbContextBase(DbContextOptions options) : base(options) { }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        protected EntityHistoryDbContextBase() { }
+        protected HistoryDbContextBase() { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,20 +34,28 @@ namespace EntityHistory.EntityFrameworkCore
         }
     }
 
-    public abstract class EntityHistoryDbContextBase<TEntityChangeSet, TUserKey> : DbContext, IDbContext
+    public abstract class HistoryDbContextBase<TEntityChangeSet, TUserKey> : DbContext, IDbContext
         where TEntityChangeSet : EntityChangeSet<TUserKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        /// <summary>
-        /// Initializes a new instance of the class.
-        /// </summary>
-        /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        protected EntityHistoryDbContextBase(DbContextOptions options) : base(options) { }
+        public IHistoryDbContextHelper<DbContext> DbContextHelper { protected get; set; }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        protected EntityHistoryDbContextBase() { }
+        /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
+        protected HistoryDbContextBase(DbContextOptions options) : base(options)
+        {
+            DbContextHelper = NullHistoryDbContextHelper<DbContext>.Instance;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the class.
+        /// </summary>
+        protected HistoryDbContextBase()
+        {
+            DbContextHelper = NullHistoryDbContextHelper<DbContext>.Instance;
+        }
 
         /// <summary>
         /// Entity change sets.
@@ -63,9 +71,7 @@ namespace EntityHistory.EntityFrameworkCore
         /// Entity property changes.
         /// </summary>
         public virtual DbSet<EntityPropertyChange> EntityPropertyChanges { get; set; }
-
-        public IEntityHistoryHelper<TEntityChangeSet> EntityHistoryHelper { protected get; set; }
-
+        
         public override int SaveChanges()
         {
             return this.SaveChanges(acceptAllChangesOnSuccess: true);
@@ -73,16 +79,7 @@ namespace EntityHistory.EntityFrameworkCore
 
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
-            var changeSet = EntityHistoryHelper?.GetEntityChangeSet(ChangeTracker.Entries().ToList());
-
-            var result = base.SaveChanges(acceptAllChangesOnSuccess);
-
-            if (changeSet != null)
-            {
-                EntityHistoryHelper?.UpdateAndSave(changeSet);
-            }
-
-            return result;
+            return DbContextHelper.SaveChanges(this, () => base.SaveChanges(acceptAllChangesOnSuccess));
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
@@ -92,16 +89,7 @@ namespace EntityHistory.EntityFrameworkCore
 
         public override async Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = new CancellationToken())
         {
-            var changeSet = EntityHistoryHelper?.GetEntityChangeSet(ChangeTracker.Entries().ToList());
-
-            var result = await base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
-
-            if (EntityHistoryHelper != null && changeSet != null)
-            {
-                await EntityHistoryHelper.UpdateAndSaveAsync(changeSet);
-            }
-
-            return result;
+            return await DbContextHelper.SaveChangesAsync(this, () => base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

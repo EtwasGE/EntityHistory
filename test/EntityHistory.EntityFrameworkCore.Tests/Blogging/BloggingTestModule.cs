@@ -13,7 +13,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Blogging
             var options = GetDbContextOptions<BloggingDbContext>(builder);
             var isCreated = new BloggingDbContext(options).Database.EnsureCreated();
 
-            builder.RegisterType<BloggingEntityHistoryConfiguration>()
+            builder.RegisterType<BloggingHistoryConfiguration>()
                 .AsImplementedInterfaces()
                 .SingleInstance();
 
@@ -22,10 +22,13 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Blogging
                 .As<IDbContext>()
                 .PropertiesAutowired();
 
-            builder.RegisterType<EntityHistoryHelper>()
+            builder.RegisterType<HistoryHelper>()
                 .AsImplementedInterfaces()
                 .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<HistoryDbContextHelper>()
+                .AsImplementedInterfaces();
         }
     }
 }

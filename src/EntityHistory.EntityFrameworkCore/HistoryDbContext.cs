@@ -3,38 +3,38 @@ using EntityHistory.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 namespace EntityHistory.EntityFrameworkCore
 {
-    public class EntityHistoryDbContext : EntityHistoryDbContext<long>
+    public class HistoryDbContext : HistoryDbContext<long>
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        public EntityHistoryDbContext(DbContextOptions options) : base(options) { }
+        public HistoryDbContext(DbContextOptions options) : base(options) { }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        protected EntityHistoryDbContext() { }
+        protected HistoryDbContext() { }
     }
 
-    public class EntityHistoryDbContext<TUserKey>
-        : EntityHistoryDbContextBase<EntityChangeSet<TUserKey>, TUserKey>
+    public class HistoryDbContext<TUserKey>
+        : HistoryDbContextBase<EntityChangeSet<TUserKey>, TUserKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        public EntityHistoryDbContext(DbContextOptions options) : base(options) { }
+        public HistoryDbContext(DbContextOptions options) : base(options) { }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        protected EntityHistoryDbContext() { }
+        protected HistoryDbContext() { }
     }
 
-    public class EntityHistoryDbContext<TUserKey, TUser>
-        : EntityHistoryDbContextBase<EntityChangeSet<TUserKey, TUser>, TUserKey, TUser>
+    public class HistoryDbContext<TUserKey, TUser>
+        : HistoryDbContextBase<EntityChangeSet<TUserKey, TUser>, TUserKey, TUser>
         where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
     {
@@ -42,11 +42,11 @@ namespace EntityHistory.EntityFrameworkCore
         /// Initializes a new instance of the class.
         /// </summary>
         /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        public EntityHistoryDbContext(DbContextOptions options) : base(options) { }
+        public HistoryDbContext(DbContextOptions options) : base(options) { }
 
         /// <summary>
         /// Initializes a new instance of the class.
         /// </summary>
-        protected EntityHistoryDbContext() { }
+        protected HistoryDbContext() { }
     }
 }

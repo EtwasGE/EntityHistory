@@ -4,11 +4,11 @@ using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 
 namespace EntityHistory.EntityFrameworkCore.Common
 {
-    public class EntityHistoryStore : IEntityHistoryStore
+    public class HistoryStore : IHistoryStore
     {
         private readonly IDbContext _context;
 
-        public EntityHistoryStore(IDbContext context)
+        public HistoryStore(IDbContext context)
         {
             _context = context;
         }

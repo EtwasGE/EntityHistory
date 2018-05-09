@@ -14,22 +14,22 @@ using JetBrains.Annotations;
 
 namespace EntityHistory.Core.History
 {
-    public abstract class EntityHistoryHelperBase<TEntityEntry, TEntityChangeSet, TUserKey>
-        : IEntityHistoryHelper<TEntityEntry, TEntityChangeSet>
+    public abstract class HistoryHelperBase<TEntityEntry, TEntityChangeSet, TUserKey>
+        : IHistoryHelper<TEntityEntry, TEntityChangeSet>
         where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
         where TUserKey : struct, IEquatable<TUserKey>
     {
         public ISession<TUserKey> Session { protected get; set; }
         public IClientInfoProvider ClientInfoProvider { protected get; set; }
-        public IEntityHistoryStore EntityHistoryStore { protected get; set; }
+        public IHistoryStore HistoryStore { protected get; set; }
 
-        protected IEntityHistoryConfiguration Configuration { get; }
+        protected IHistoryConfiguration Configuration { get; }
 
-        protected EntityHistoryHelperBase(IEntityHistoryConfiguration configuration)
+        protected HistoryHelperBase(IHistoryConfiguration configuration)
         {
             Session = NullSession<TUserKey>.Instance;
             ClientInfoProvider = NullClientInfoProvider.Instance;
-            EntityHistoryStore = NullEntityHistoryStore.Instance;
+            HistoryStore = NullHistoryStore.Instance;
 
             Configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
         }
@@ -102,7 +102,7 @@ namespace EntityHistory.Core.History
             }
 
             UpdateChangeSet(changeSet);
-            await EntityHistoryStore.SaveAsync(changeSet);
+            await HistoryStore.SaveAsync(changeSet);
         }
     }
 }

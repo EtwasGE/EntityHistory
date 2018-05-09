@@ -6,7 +6,7 @@ namespace EntityHistory.Abstractions.Configuration
     /// <summary>
     /// Used to configure entity history.
     /// </summary>
-    public interface IEntityHistoryConfiguration
+    public interface IHistoryConfiguration
     {
         /// <summary>
         /// Used to enable/disable entity history system.

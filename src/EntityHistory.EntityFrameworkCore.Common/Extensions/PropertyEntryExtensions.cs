@@ -10,7 +10,7 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
     public static class PropertyEntryExtensions
     {
         [CanBeNull]
-        public static string GetCurrentValue([NotNull] this PropertyEntry propertyEntry)
+        public static string GetCurrentValue(this PropertyEntry propertyEntry)
         {
             var entityType = propertyEntry.EntityEntry.Metadata.ClrType;
             var propertyName = propertyEntry.Metadata.Name;
@@ -30,7 +30,7 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
         }
 
         [CanBeNull]
-        public static string GetOriginalValue([NotNull] this PropertyEntry propertyEntry)
+        public static string GetOriginalValue(this PropertyEntry propertyEntry)
         {
             var entityType = propertyEntry.EntityEntry.Metadata.ClrType;
             var propertyName = propertyEntry.Metadata.Name;

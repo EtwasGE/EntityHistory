@@ -2,9 +2,9 @@
 
 namespace EntityHistory.EntityFrameworkCore.Tests.BookLibrary
 {
-    public class BookLibraryEntityHistoryConfiguration : EntityHistoryConfiguration
+    public class BookLibraryHistoryConfiguration : HistoryConfiguration
     {
-        public BookLibraryEntityHistoryConfiguration()
+        public BookLibraryHistoryConfiguration()
         {
             IsEnabledForAnonymousUsers = true;
         }

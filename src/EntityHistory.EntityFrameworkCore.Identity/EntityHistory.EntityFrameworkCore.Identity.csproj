@@ -184,8 +184,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="EntityHistoryDbContext.cs" />
-    <Compile Include="EntityHistoryDbContextBase.cs" />
+    <Compile Include="HistoryDbContext.cs" />
+    <Compile Include="HistoryDbContextBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -43,14 +43,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Configuration\IEntityHistoryConfiguration.cs" />
+    <Compile Include="Configuration\IHistoryConfiguration.cs" />
     <Compile Include="Configuration\IEntityConfiguration.cs" />
     <Compile Include="Configuration\IEntitiesConfigurator.cs" />
     <Compile Include="Configuration\IConfigurationModule.cs" />
     <Compile Include="IEntity.cs" />
-    <Compile Include="IEntityHistoryHelper.cs" />
-    <Compile Include="IEntityHistoryStore.cs" />
+    <Compile Include="IHistoryHelper.cs" />
+    <Compile Include="IHistoryStore.cs" />
     <Compile Include="Auditing\IClientInfoProvider.cs" />
+    <Compile Include="IHistoryDbContextHelper.cs" />
     <Compile Include="Session\ISession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\IPrincipalAccessor.cs" />

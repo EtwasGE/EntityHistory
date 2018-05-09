@@ -26,24 +26,31 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
         }
 
         [Fact]
-        public void Should_Resolve_EntityHistoryConfiguration_If_Registered()
+        public void Should_Resolve_HistoryConfiguration_If_Registered()
         {
-            Container.TryResolve<IEntityHistoryConfiguration>(out var config);
+            Container.TryResolve<IHistoryConfiguration>(out var config);
             config.ShouldNotBeNull();
         }
 
         [Fact]
-        public void Should_Resolve_EntityHistoryHelper_If_Registered()
+        public void Should_Resolve_HistoryHelper_If_Registered()
         {
-            Container.TryResolve<IEntityHistoryHelper<EntityChangeSet<long>>>(out var helper);
+            Container.TryResolve<IHistoryHelper<EntityChangeSet<long>>>(out var helper);
             helper.ShouldNotBeNull();
         }
 
         [Fact]
-        public void Should_Resolve_EntityHistoryStore_If_Registered()
+        public void Should_Resolve_HistoryStore_If_Registered()
         {
-            Container.TryResolve<IEntityHistoryStore>(out var store);
+            Container.TryResolve<IHistoryStore>(out var store);
             store.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void Should_Resolve_HistoryDbContext_If_Registered()
+        {
+            Container.TryResolve<IHistoryDbContextHelper>(out var helper);
+            helper.ShouldNotBeNull();
         }
     }
 }

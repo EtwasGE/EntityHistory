@@ -9,7 +9,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<EntityHistoryStore>()
+            builder.RegisterType<HistoryStore>()
                 .AsImplementedInterfaces();
         }
 

@@ -6,7 +6,7 @@ namespace EntityHistory.Abstractions
     /// This interface should be implemented by vendors to
     /// make entity history working.
     /// </summary>
-    public interface IEntityHistoryStore
+    public interface IHistoryStore
     { 
         /// <summary>
         /// Should save entity change set to a persistent store.

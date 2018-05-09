@@ -3,9 +3,9 @@ using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core.History
 {
-    public sealed class NullEntityHistoryStore : IEntityHistoryStore
+    public sealed class NullHistoryStore : IHistoryStore
     {
-        public static NullEntityHistoryStore Instance { get; } = new NullEntityHistoryStore();
+        public static NullHistoryStore Instance { get; } = new NullHistoryStore();
 
         public Task SaveAsync<TEntityChangeSet>(TEntityChangeSet entityChangeSet) where TEntityChangeSet : class
         {

@@ -7,9 +7,9 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.BookLibrary
 {
-    public class BookLibraryEntityHistoryHelper : EntityHistoryHelper<CustomEntityChangeSet, long>
+    public class BookLibraryHistoryHelper : HistoryHelper<CustomEntityChangeSet, long>
     {
-        public BookLibraryEntityHistoryHelper(IEntityHistoryConfiguration configuration)
+        public BookLibraryHistoryHelper(IHistoryConfiguration configuration)
             : base(configuration)
         {
         }

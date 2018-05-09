@@ -15,29 +15,29 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common
 {
-    public class EntityHistoryHelper : EntityHistoryHelper<long>
+    public class HistoryHelper : HistoryHelper<long>
     {
-        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
+        public HistoryHelper(IHistoryConfiguration configuration)
             : base(configuration)
         {
         }
     }
     
-    public class EntityHistoryHelper<TUserKey> : EntityHistoryHelper<EntityChangeSet<TUserKey>, TUserKey>
+    public class HistoryHelper<TUserKey> : HistoryHelper<EntityChangeSet<TUserKey>, TUserKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
+        public HistoryHelper(IHistoryConfiguration configuration)
             : base(configuration)
         {
         }
     }
 
-    public class EntityHistoryHelper<TEntityChangeSet, TUserKey>
-        : EntityHistoryHelperBase<EntityEntry, TEntityChangeSet, TUserKey>, IEntityHistoryHelper<TEntityChangeSet>
+    public class HistoryHelper<TEntityChangeSet, TUserKey>
+        : HistoryHelperBase<EntityEntry, TEntityChangeSet, TUserKey>, IHistoryHelper<TEntityChangeSet>
         where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        public EntityHistoryHelper(IEntityHistoryConfiguration configuration)
+        public HistoryHelper(IHistoryConfiguration configuration)
             : base(configuration)
         {
         }

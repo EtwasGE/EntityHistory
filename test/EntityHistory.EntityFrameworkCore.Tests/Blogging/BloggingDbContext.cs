@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.Blogging
 {
-    public class BloggingDbContext : EntityHistoryDbContext
+    public class BloggingDbContext : HistoryDbContext
     {
         public DbSet<Blog> Blogs { get; set; }
 

@@ -6,7 +6,7 @@ using EntityHistory.Core.Entities;
 
 namespace EntityHistory.Configuration
 {
-    public class EntityHistoryConfiguration : IEntityHistoryConfiguration
+    public class HistoryConfiguration : IHistoryConfiguration
     {
         public bool IsEnabled { get; protected set; }
 
@@ -14,7 +14,7 @@ namespace EntityHistory.Configuration
 
         public List<Type> IgnoredTypes { get; protected set; }
 
-        public EntityHistoryConfiguration()
+        public HistoryConfiguration()
         {
             Initial();
         }
