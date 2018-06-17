@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using EntityHistory.Abstractions;
 
 namespace EntityHistory.Core.Entities
 {
-    public class EntityChange : IEntity<Guid>
+    public class EntityChange
     {
         public EntityChange()
         {
-            PropertyChanges = new List<EntityPropertyChange>();
+            PropertyChanges = new HashSet<EntityPropertyChange>();
         }
 
         /// <summary>
@@ -26,33 +25,33 @@ namespace EntityHistory.Core.Entities
         /// <summary>
         /// Primary Key
         /// </summary>
-        public virtual Guid Id { get; set; }
+        public Guid Id { get; set; }
 
         /// <summary>
         /// ChangeType.
         /// </summary>
-        public virtual EntityChangeType ChangeType { get; set; }
+        public EntityChangeType ChangeType { get; set; }
 
         /// <summary>
         /// Gets/sets primary key of the entity.
         /// </summary>
-        public virtual string EntityId { get; set; }
+        public string EntityId { get; set; }
 
         /// <summary>
         /// FullName of the entity type.
         /// </summary>
-        public virtual string EntityTypeFullName { get; set; }
+        public string EntityTypeFullName { get; set; }
 
         /// <summary>
         /// Gets/sets change set id, used to group entity changes.
         /// </summary>
-        public virtual Guid EntityChangeSetId { get; set; }
+        public Guid EntityChangeSetId { get; set; }
 
         /// <summary>
         /// PropertyChanges.
         /// </summary>
         public virtual ICollection<EntityPropertyChange> PropertyChanges { get; set; }
 
-        public virtual object EntityEntry { get; set; }
+        public object EntityEntry { get; set; }
     }
 }

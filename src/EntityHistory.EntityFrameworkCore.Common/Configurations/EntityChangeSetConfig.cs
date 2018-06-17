@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 {
-    public class EntityChangeSetConfig<TEntityChangeSet, TUserKey, TUser> : EntityChangeSetConfig<TEntityChangeSet, TUserKey>
+    internal class EntityChangeSetConfig<TEntityChangeSet, TUserKey, TUser> : EntityChangeSetConfig<TEntityChangeSet, TUserKey>
         where TEntityChangeSet : EntityChangeSet<TUserKey, TUser>
         where TUserKey : struct, IEquatable<TUserKey>
         where TUser : class
@@ -20,7 +20,7 @@ namespace EntityHistory.EntityFrameworkCore.Common.Configurations
         }
     }
 
-    public class EntityChangeSetConfig<TEntityChangeSet, TUserKey> : IEntityTypeConfiguration<TEntityChangeSet>
+    internal class EntityChangeSetConfig<TEntityChangeSet, TUserKey> : IEntityTypeConfiguration<TEntityChangeSet>
         where TEntityChangeSet : EntityChangeSet<TUserKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {

@@ -100,12 +100,8 @@
     <Compile Include="Configurations\EntityPropertyChangeConfig.cs" />
     <Compile Include="HistoryDbContextHelper.cs" />
     <Compile Include="HistoryHelper.cs" />
-    <Compile Include="HistoryStore.cs" />
     <Compile Include="Extensions\EntityEntryExtensions.cs" />
     <Compile Include="Extensions\PropertyEntryExtensions.cs" />
-    <Compile Include="Interfaces\IDbContext.cs" />
-    <Compile Include="Interfaces\IHistoryDbContextHelper.cs" />
-    <Compile Include="Interfaces\IHistoryHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

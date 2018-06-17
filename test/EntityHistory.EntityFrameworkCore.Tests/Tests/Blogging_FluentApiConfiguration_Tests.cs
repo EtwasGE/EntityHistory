@@ -1,8 +1,12 @@
 ﻿using System.Linq;
 using Autofac;
+using EntityHistory.Abstractions;
 using EntityHistory.Core;
+using EntityHistory.Core.Entities;
 using EntityHistory.EntityFrameworkCore.Tests.Blogging;
 using EntityHistory.EntityFrameworkCore.Tests.Blogging.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shouldly;
 using Xunit;
 
@@ -23,7 +27,6 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
                     var blog1 = new Blog("test-blog-1", "http://testblog1.myblogs.com");
 
                     context.Blogs.Add(blog1);
-                    context.SaveChanges();
 
                     var post1 = new Post { Blog = blog1, Title = "test-post-1-title", Body = "test-post-1-body" };
                     var post2 = new Post { Blog = blog1, Title = "test-post-2-title", Body = "test-post-2-body" };
@@ -32,6 +35,27 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
 
                     context.Posts.AddRange(post1, post2, post3, post4);
                 });
+        }
+
+        [Fact]
+        public void Should_Resolve_HistoryHelper_If_Registered()
+        {
+            Container.TryResolve<IHistoryHelper<EntityEntry, EntityChangeSet<long>>>(out var helper);
+            helper.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void Should_Resolve_HistoryDbContext_If_Registered()
+        {
+            Container.TryResolve<IHistoryDbContextHelper<DbContext>>(out var helper);
+            helper.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void Should_Resolve_BloggerDbContext_If_Registered()
+        {
+            Container.TryResolve<BloggingDbContext>(out var bloggingDbContext);
+            bloggingDbContext.ShouldNotBeNull();
         }
 
         [Fact]

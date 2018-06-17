@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Extensions
 {
-    public static class PropertyEntryExtensions
+    internal static class PropertyEntryExtensions
     {
         [CanBeNull]
         public static string GetCurrentValue(this PropertyEntry propertyEntry)
@@ -15,12 +15,12 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
             var entityType = propertyEntry.EntityEntry.Metadata.ClrType;
             var propertyName = propertyEntry.Metadata.Name;
 
-            if (GlobalConfigHelper.IsOverridden(entityType, propertyName, out object overrideValue))
+            if (HistoryConfiguration.IsOverridden(entityType, propertyName, out object overrideValue))
             {
                 return overrideValue?.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength);
             }
 
-            if (GlobalConfigHelper.IsFormated(entityType, propertyName, out Func<object, object> formatedFunc))
+            if (HistoryConfiguration.IsFormated(entityType, propertyName, out Func<object, object> formatedFunc))
             {
                 return formatedFunc.Invoke(propertyEntry.CurrentValue)?.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength);
             }
@@ -35,7 +35,7 @@ namespace EntityHistory.EntityFrameworkCore.Common.Extensions
             var entityType = propertyEntry.EntityEntry.Metadata.ClrType;
             var propertyName = propertyEntry.Metadata.Name;
 
-            if (GlobalConfigHelper.IsOverridden(entityType, propertyName, out object overrideValue))
+            if (HistoryConfiguration.IsOverridden(entityType, propertyName, out object overrideValue))
             {
                 return overrideValue?.ToString().TruncateWithPostfix(EntityPropertyChange.MaxValueLength);
             }

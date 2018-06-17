@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Extensions
 {
-    public static class EntityEntryExtensions
+    internal static class EntityEntryExtensions
     {
         public static bool IsCreated(this EntityEntry entityEntry)
         {

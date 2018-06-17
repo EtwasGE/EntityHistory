@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace EntityHistory.Abstractions
 {
@@ -7,6 +6,6 @@ namespace EntityHistory.Abstractions
     {
         TEntityChangeSet GetEntityChangeSet(ICollection<TEntityEntry> entityEntries);
 
-        Task UpdateAndSaveAsync(TEntityChangeSet changeSet);
+        void UpdateEntityChangeSet(TEntityChangeSet changeSet);
     }
 }

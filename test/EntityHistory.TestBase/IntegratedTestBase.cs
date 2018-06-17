@@ -2,7 +2,6 @@
 using Autofac;
 using Autofac.Core;
 using EntityHistory.Abstractions.Session;
-using EntityHistory.IoC;
 
 namespace EntityHistory.TestBase
 {

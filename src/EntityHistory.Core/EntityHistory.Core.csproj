@@ -79,8 +79,6 @@
     <Compile Include="Helpers\Check.cs" />
     <Compile Include="History\HistoryHelperBase.cs" />
     <Compile Include="History\NullHistoryDbContextHelper.cs" />
-    <Compile Include="History\NullHistoryStore.cs" />
-    <Compile Include="Extensions\HistoryHelperExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Session\ClaimsSession.cs" />
     <Compile Include="Session\DefaultPrincipalAccessor.cs" />

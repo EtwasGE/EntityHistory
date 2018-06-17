@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EntityHistory.IoC
+﻿namespace EntityHistory.TestBase
 {
     public class BootstrapperOptions
     {

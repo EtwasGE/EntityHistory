@@ -1,45 +1,38 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using EntityHistory.Abstractions.Configuration;
 using EntityHistory.Configuration;
 using EntityHistory.Core;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.Extensions;
 using EntityHistory.Core.History;
 using EntityHistory.EntityFrameworkCore.Common.Extensions;
-using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common
 {
-    public class HistoryHelper : HistoryHelper<long>
-    {
-        public HistoryHelper(IHistoryConfiguration configuration)
-            : base(configuration)
-        {
-        }
-    }
-    
-    public class HistoryHelper<TUserKey> : HistoryHelper<EntityChangeSet<TUserKey>, TUserKey>
-        where TUserKey : struct, IEquatable<TUserKey>
-    {
-        public HistoryHelper(IHistoryConfiguration configuration)
-            : base(configuration)
-        {
-        }
-    }
-
-    public class HistoryHelper<TEntityChangeSet, TUserKey>
-        : HistoryHelperBase<EntityEntry, TEntityChangeSet, TUserKey>, IHistoryHelper<TEntityChangeSet>
+    public class HistoryHelper<TEntityChangeSet, TUserKey> : HistoryHelperBase<EntityEntry, TEntityChangeSet, TUserKey>
         where TEntityChangeSet : EntityChangeSet<TUserKey>, new()
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        public HistoryHelper(IHistoryConfiguration configuration)
-            : base(configuration)
+        protected override bool IsEntityHistoryEnabled
         {
+            get
+            {
+                if (!HistoryConfiguration.IsEnabled)
+                {
+                    return false;
+                }
+
+                if (!HistoryConfiguration.IsEnabledForAnonymousUsers && Session?.UserId == null)
+                {
+                    return false;
+                }
+
+                return true;
+            }
         }
 
         protected override bool ShouldSaveEntityHistory(EntityEntry entityEntry)
@@ -57,7 +50,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
                 return false;
             }
 
-            if (Configuration.IgnoredTypes.Any(t => t.IsInstanceOfType(entityEntry.Entity)))
+            if (HistoryConfiguration.IgnoredTypes.Any(t => t.IsInstanceOfType(entityEntry.Entity)))
             {
                 return false;
             }
@@ -67,7 +60,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
                 return false;
             }
 
-            return GlobalConfigHelper.IsIncluded(entityType);
+            return HistoryConfiguration.IsIncluded(entityType);
         }
 
         protected virtual bool IsIgnoredType(Type entityType)
@@ -80,7 +73,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
             if (entityType.IsGenericType)
             {
                 var entityGenericTypeDefinition = entityType.GetGenericTypeDefinition();
-                if (Configuration.IgnoredTypes.Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == entityGenericTypeDefinition))
+                if (HistoryConfiguration.IgnoredTypes.Any(t => t.IsGenericType && t.GetGenericTypeDefinition() == entityGenericTypeDefinition))
                 {
                     return true;
                 }
@@ -99,7 +92,7 @@ namespace EntityHistory.EntityFrameworkCore.Common
             var entityType = propertyEntry.EntityEntry.Entity.GetType();
             var propertyName = propertyEntry.Metadata.Name;
 
-            if (!GlobalConfigHelper.IsIncluded(entityType, propertyName))
+            if (!HistoryConfiguration.IsIncluded(entityType, propertyName))
             {
                 return false;
             };

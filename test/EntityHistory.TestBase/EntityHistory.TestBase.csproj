@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseModule.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="BootstrapperOptions.cs" />
     <Compile Include="IntegratedTestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -65,10 +68,6 @@
     <ProjectReference Include="..\..\src\EntityHistory.Core\EntityHistory.Core.csproj">
       <Project>{6A8D2E48-A827-4D4F-9EF3-B80204429004}</Project>
       <Name>EntityHistory.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\EntityHistory.IoC\EntityHistory.IoC.csproj">
-      <Project>{81C18945-61F6-416F-9702-874EEBEC2B4A}</Project>
-      <Name>EntityHistory.IoC</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

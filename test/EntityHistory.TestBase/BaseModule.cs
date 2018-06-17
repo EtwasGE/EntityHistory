@@ -2,7 +2,7 @@
 using EntityHistory.Abstractions.Session;
 using EntityHistory.Core.Session;
 
-namespace EntityHistory.IoC
+namespace EntityHistory.TestBase
 {
     internal sealed class BaseModule : Module
     {

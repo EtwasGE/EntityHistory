@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace EntityHistory.EntityFrameworkCore.Common.Configurations
 {
-    public class EntityChangeConfig<TEntityChange> : IEntityTypeConfiguration<TEntityChange>
+    internal class EntityChangeConfig<TEntityChange> : IEntityTypeConfiguration<TEntityChange>
         where TEntityChange: EntityChange
     {
         public void Configure(EntityTypeBuilder<TEntityChange> builder)

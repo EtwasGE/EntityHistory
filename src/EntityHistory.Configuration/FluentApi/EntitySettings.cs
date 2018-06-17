@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace EntityHistory.Configuration.FluentApi
 {
-    public class EntityConfigContainer
+    internal class EntitySettings
     {
         /// <summary>
         /// To indicate the entity's properties (columns) to be ignored on the entity history. Key: property name.

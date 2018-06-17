@@ -5,36 +5,11 @@ using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.History;
 using EntityHistory.EntityFrameworkCore.Common.Configurations;
-using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore
 {
-    public abstract class HistoryDbContextBase<TEntityChangeSet, TUserKey, TUser>
-        : HistoryDbContextBase<TEntityChangeSet, TUserKey>
-        where TEntityChangeSet : EntityChangeSet<TUserKey, TUser>
-        where TUserKey : struct, IEquatable<TUserKey>
-        where TUser : class
-    {
-        /// <summary>
-        /// Initializes a new instance of the class.
-        /// </summary>
-        /// <param name="options">The options to be used by a <see cref="DbContext"/>.</param>
-        protected HistoryDbContextBase(DbContextOptions options) : base(options) { }
-
-        /// <summary>
-        /// Initializes a new instance of the class.
-        /// </summary>
-        protected HistoryDbContextBase() { }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.ApplyConfiguration(new EntityChangeSetConfig<TEntityChangeSet, TUserKey, TUser>());
-        }
-    }
-
-    public abstract class HistoryDbContextBase<TEntityChangeSet, TUserKey> : DbContext, IDbContext
+    public abstract class HistoryDbContextBase<TEntityChangeSet, TUserKey> : DbContext
         where TEntityChangeSet : EntityChangeSet<TUserKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
@@ -76,7 +51,7 @@ namespace EntityHistory.EntityFrameworkCore
         {
             return this.SaveChanges(acceptAllChangesOnSuccess: true);
         }
-
+        
         public override int SaveChanges(bool acceptAllChangesOnSuccess)
         {
             return DbContextHelper.SaveChanges(this, () => base.SaveChanges(acceptAllChangesOnSuccess));

@@ -5,7 +5,7 @@ using Autofac.Core;
 using EntityHistory.Core.Helpers;
 using JetBrains.Annotations;
 
-namespace EntityHistory.IoC
+namespace EntityHistory.TestBase
 {
     public class Bootstrapper : IDisposable
     {

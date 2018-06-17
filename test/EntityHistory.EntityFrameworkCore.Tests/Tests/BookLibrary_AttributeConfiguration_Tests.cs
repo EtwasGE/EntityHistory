@@ -1,8 +1,12 @@
 ﻿using System.Linq;
 using Autofac;
+using EntityHistory.Abstractions;
 using EntityHistory.Core;
+using EntityHistory.Core.Entities;
 using EntityHistory.EntityFrameworkCore.Tests.BookLibrary;
 using EntityHistory.EntityFrameworkCore.Tests.BookLibrary.Domain;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shouldly;
 using Xunit;
 
@@ -10,6 +14,27 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
 {
     public class AttributeConfiguration_Tests : EntityFrameworkCoreTestBase<BookLibraryTestModule>
     {
+        [Fact]
+        public void Should_Resolve_HistoryHelper_If_Registered()
+        {
+            Container.TryResolve<IHistoryHelper<EntityEntry, EntityChangeSet<long, User>>>(out var helper);
+            helper.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void Should_Resolve_HistoryDbContext_If_Registered()
+        {
+            Container.TryResolve<IHistoryDbContextHelper<DbContext>>(out var helper);
+            helper.ShouldNotBeNull();
+        }
+
+        [Fact]
+        public void Should_Resolve_BookLibraryDbContext_If_Registered()
+        {
+            Container.TryResolve<BookLibraryDbContext>(out var bloggingDbContext);
+            bloggingDbContext.ShouldNotBeNull();
+        }
+
         [Fact]
         public void Book_Original_Title_And_Description_Test()
         {

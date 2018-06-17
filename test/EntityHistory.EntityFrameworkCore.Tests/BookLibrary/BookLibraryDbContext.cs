@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.BookLibrary
 {
-    public class BookLibraryDbContext : HistoryDbContextBase<CustomEntityChangeSet, long, User>
+    public class BookLibraryDbContext : HistoryDbContext<long, User>
     {
         public DbSet<User> Users { get; set; }
 

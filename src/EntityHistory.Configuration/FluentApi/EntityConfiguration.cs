@@ -5,7 +5,7 @@ using EntityHistory.Abstractions.Configuration;
 
 namespace EntityHistory.Configuration.FluentApi
 {
-    public class EntityConfiguration<TEntity> : IEntityConfiguration<TEntity>
+    internal class EntityConfiguration<TEntity> : IEntityConfiguration<TEntity>
     {
         public List<string> IgnoredProperties = new List<string>();
         public Dictionary<string, object> OverrideProperties = new Dictionary<string, object>();
@@ -50,14 +50,14 @@ namespace EntityHistory.Configuration.FluentApi
             return this;
         }
 
-        public IEntityConfiguration<TEntity> Format<TProp, TResult>(Expression<Func<TEntity, TProp>> property, Func<TProp, TResult> format)
+        public virtual IEntityConfiguration<TEntity> Format<TProp, TResult>(Expression<Func<TEntity, TProp>> property, Func<TProp, TResult> format)
         {
             var name = GetMemberName(property);
             FormatProperties[name] = entity => format.Invoke((TProp)entity);
             return this;
         }
 
-        public IEntityConfiguration<TEntity> Format<TProp, TResult>(string propertyName, Func<TProp, TResult> format)
+        public virtual IEntityConfiguration<TEntity> Format<TProp, TResult>(string propertyName, Func<TProp, TResult> format)
         {
             FormatProperties[propertyName] = entity => format.Invoke((TProp)entity);
             return this;

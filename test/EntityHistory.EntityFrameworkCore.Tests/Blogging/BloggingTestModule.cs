@@ -1,10 +1,11 @@
 ﻿using Autofac;
-using EntityHistory.EntityFrameworkCore.Common;
-using EntityHistory.EntityFrameworkCore.Common.Interfaces;
+using EntityHistory.Abstractions.Configuration;
+using EntityHistory.Configuration;
+using EntityHistory.EntityFrameworkCore.Tests.Blogging.Domain;
 
 namespace EntityHistory.EntityFrameworkCore.Tests.Blogging
 {
-    public class BloggingTestModule : EntityFrameworkCoreTestModuleBase
+    public class BloggingTestModule : EntityFrameworkCoreTestModule
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -13,22 +14,32 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Blogging
             var options = GetDbContextOptions<BloggingDbContext>(builder);
             var isCreated = new BloggingDbContext(options).Database.EnsureCreated();
 
-            builder.RegisterType<BloggingHistoryConfiguration>()
-                .AsImplementedInterfaces()
-                .SingleInstance();
-
             builder.RegisterType<BloggingDbContext>()
-                .AsSelf()
-                .As<IDbContext>()
                 .PropertiesAutowired();
+            
+            InitialConfiguration();
+        }
 
-            builder.RegisterType<HistoryHelper>()
-                .AsImplementedInterfaces()
-                .PropertiesAutowired(PropertyWiringOptions.AllowCircularDependencies)
-                .InstancePerLifetimeScope();
+        private void InitialConfiguration()
+        {
+            HistoryConfiguration.IsEnabledForAnonymousUsers = true;
 
-            builder.RegisterType<HistoryDbContextHelper>()
-                .AsImplementedInterfaces();
+            HistoryConfiguration.Setup()
+                .ForEntity<Post>(x => x.Format<string>(property => property.Body, body => $"{body} formated"))
+                .AllInclude<CommentFirstBase>()
+                .AllInclude(typeof(CommentSecondBase))
+                .ApplyConfiguration(new BlogConfig());
+        }
+    }
+
+    public class BlogConfig : IConfigurationModule<Blog>
+    {
+        public void Configure(IEntityConfiguration<Blog> config)
+        {
+            config
+                .Ignore(x => x.Url)
+                .Override(x => x.Name, "Override value")
+                .Format(property => property.Raiting, raiting => "CustomValue");
         }
     }
 }

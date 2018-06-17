@@ -5,7 +5,6 @@ using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
 using EntityHistory.Core.History;
 using EntityHistory.EntityFrameworkCore.Common.Configurations;
-using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace EntityHistory.EntityFrameworkCore.Identity
 {
     public abstract class HistoryDbContextBase<TEntityChangeSet, TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
-        : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>, IDbContext
+        : IdentityDbContext<TUser, TRole, TKey, TUserClaim, TUserRole, TUserLogin, TRoleClaim, TUserToken>
         where TEntityChangeSet : EntityChangeSet<TKey, TUser>
         where TUser : IdentityUser<TKey>
         where TRole : IdentityRole<TKey>

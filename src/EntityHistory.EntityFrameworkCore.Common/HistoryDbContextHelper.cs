@@ -1,37 +1,20 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using EntityHistory.Abstractions;
 using EntityHistory.Core.Entities;
-using EntityHistory.Core.Extensions;
-using EntityHistory.EntityFrameworkCore.Common.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace EntityHistory.EntityFrameworkCore.Common
 {
-    public class HistoryDbContextHelper : HistoryDbContextHelper<long>
-    {
-        public HistoryDbContextHelper(IHistoryHelper<EntityChangeSet<long>> historyHelper) 
-            : base(historyHelper)
-        {
-        }
-    }
-
-    public class HistoryDbContextHelper<TUserKey> : HistoryDbContextHelper<EntityChangeSet<TUserKey>, TUserKey>
-        where TUserKey : struct, IEquatable<TUserKey>
-    {
-        public HistoryDbContextHelper(IHistoryHelper<EntityChangeSet<TUserKey>> historyHelper) 
-            : base(historyHelper)
-        {
-        }
-    }
-
-    public class HistoryDbContextHelper<TEntityChangeSet, TUserKey> : IHistoryDbContextHelper
+    public class HistoryDbContextHelper<TEntityChangeSet, TUserKey> : IHistoryDbContextHelper<DbContext>
         where TEntityChangeSet : EntityChangeSet<TUserKey>
         where TUserKey : struct, IEquatable<TUserKey>
     {
-        private readonly IHistoryHelper<TEntityChangeSet> _historyHelper;
+        private readonly IHistoryHelper<EntityEntry, TEntityChangeSet> _historyHelper;
 
-        public HistoryDbContextHelper(IHistoryHelper<TEntityChangeSet> historyHelper)
+        public HistoryDbContextHelper(IHistoryHelper<EntityEntry, TEntityChangeSet> historyHelper)
         {
             _historyHelper = historyHelper ?? throw new ArgumentNullException(nameof(historyHelper));
         }
@@ -43,11 +26,16 @@ namespace EntityHistory.EntityFrameworkCore.Common
         {
             var changeSet = _historyHelper.GetEntityChangeSet(context.ChangeTracker.Entries().ToList());
 
-            var result = await baseSaveChanges.Invoke();
+            var result = await baseSaveChanges();
 
-            if (changeSet != null)
+            if (changeSet != null 
+                && changeSet.EntityChanges.Count != 0 
+                && changeSet.EntityChanges.Any(x => x.PropertyChanges.Count != 0))
             {
-                await _historyHelper.UpdateAndSaveAsync(changeSet);
+                _historyHelper.UpdateEntityChangeSet(changeSet);
+
+                await context.Set<TEntityChangeSet>().AddAsync(changeSet);
+                await baseSaveChanges();
             }
 
             return result;
@@ -60,13 +48,18 @@ namespace EntityHistory.EntityFrameworkCore.Common
         {
             var changeSet = _historyHelper.GetEntityChangeSet(context.ChangeTracker.Entries().ToList());
 
-            var result = baseSaveChanges.Invoke();
+            var result = baseSaveChanges();
 
-            if (changeSet != null)
+            if (changeSet != null 
+                && changeSet.EntityChanges.Count != 0 
+                && changeSet.EntityChanges.Any(x => x.PropertyChanges.Count != 0))
             {
-                _historyHelper.UpdateAndSave(changeSet);
-            }
+                _historyHelper.UpdateEntityChangeSet(changeSet);
 
+                context.Set<TEntityChangeSet>().Add(changeSet);
+                baseSaveChanges();
+            }
+            
             return result;
         }
     }
