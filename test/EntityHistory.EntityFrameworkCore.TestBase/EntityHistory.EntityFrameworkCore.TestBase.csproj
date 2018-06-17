@@ -1,16 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props" Condition="Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" />
-  <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.props" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3B9ECCF6-3494-42AE-BEF8-9EB16B7DFA90}</ProjectGuid>
+    <ProjectGuid>{DCEACB69-82AE-4E03-BF6A-B80A034F6DA1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EntityHistory.EntityFrameworkCore.Tests</RootNamespace>
-    <AssemblyName>EntityHistory.EntityFrameworkCore.Tests</AssemblyName>
+    <RootNamespace>EntityHistory.EntityFrameworkCore.TestBase</RootNamespace>
+    <AssemblyName>EntityHistory.EntityFrameworkCore.TestBase</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -88,9 +86,6 @@
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
-    <Reference Include="Shouldly, Version=3.0.0.0, Culture=neutral, PublicKeyToken=6042cbcb05cbc941, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Shouldly.3.0.0\lib\net451\Shouldly.dll</HintPath>
-    </Reference>
     <Reference Include="SQLitePCLRaw.batteries_green, Version=1.1.11.121, Culture=neutral, PublicKeyToken=a84b7dcfb1391f7f, processorArchitecture=MSIL">
       <HintPath>..\..\packages\SQLitePCLRaw.bundle_green.1.1.11\lib\net45\SQLitePCLRaw.batteries_green.dll</HintPath>
     </Reference>
@@ -113,7 +108,6 @@
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.ComponentModel.Annotations.4.5.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
     </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -122,7 +116,6 @@
     <Reference Include="System.Interactive.Async, Version=3.0.3000.0, Culture=neutral, PublicKeyToken=94bc3704cddfc263, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Interactive.Async.3.1.1\lib\net46\System.Interactive.Async.dll</HintPath>
     </Reference>
-    <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Memory, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Memory.4.5.0\lib\netstandard2.0\System.Memory.dll</HintPath>
     </Reference>
@@ -137,36 +130,13 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="xunit.abstractions, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.abstractions.2.0.1\lib\net35\xunit.abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.assert, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.assert.2.3.1\lib\netstandard1.1\xunit.assert.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.core, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.core.2.3.1\lib\netstandard1.1\xunit.core.dll</HintPath>
-    </Reference>
-    <Reference Include="xunit.execution.desktop, Version=2.3.1.3858, Culture=neutral, PublicKeyToken=8d05b1bb7a6fdb6c, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\xunit.extensibility.execution.2.3.1\lib\net452\xunit.execution.desktop.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Blogging\Domain\Blog.cs" />
-    <Compile Include="Blogging\Domain\Comment.cs" />
-    <Compile Include="Blogging\Domain\Post.cs" />
-    <Compile Include="Blogging\BloggingDbContext.cs" />
-    <Compile Include="BookLibrary\BookLibraryTestModule.cs" />
-    <Compile Include="BookLibrary\BookLibraryDbContext.cs" />
-    <Compile Include="BookLibrary\Domain\Author.cs" />
-    <Compile Include="BookLibrary\Domain\Book.cs" />
-    <Compile Include="BookLibrary\Domain\Tag.cs" />
-    <Compile Include="BookLibrary\Domain\User.cs" />
-    <Compile Include="Blogging\BloggingTestModule.cs" />
-    <Compile Include="EntityFrameworkCoreTestModule.cs" />
+    <Compile Include="EntityFrameworkCoreTestBase.cs" />
+    <Compile Include="EntityFrameworkCoreTestModuleBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tests\BookLibrary_AttributeConfiguration_Tests.cs" />
-    <Compile Include="Tests\Blogging_FluentApiConfiguration_Tests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -174,50 +144,32 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\EntityHistory.Abstractions\EntityHistory.Abstractions.csproj">
-      <Project>{C12BD493-647E-4AB7-A42A-31A5C02F9AC9}</Project>
+      <Project>{c12bd493-647e-4ab7-a42a-31a5c02f9ac9}</Project>
       <Name>EntityHistory.Abstractions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\EntityHistory.Configuration\EntityHistory.Configuration.csproj">
-      <Project>{42ae285b-f48d-4e07-892e-eef957f87a8b}</Project>
-      <Name>EntityHistory.Configuration</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\EntityHistory.Core\EntityHistory.Core.csproj">
       <Project>{6A8D2E48-A827-4D4F-9EF3-B80204429004}</Project>
       <Name>EntityHistory.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\src\EntityHistory.EntityFrameworkCore\EntityHistory.EntityFrameworkCore.csproj">
-      <Project>{4C694598-5A50-424B-BE55-A37E5F8F3B90}</Project>
-      <Name>EntityHistory.EntityFrameworkCore</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EntityHistory.EntityFrameworkCore.TestBase\EntityHistory.EntityFrameworkCore.TestBase.csproj">
-      <Project>{DCEACB69-82AE-4E03-BF6A-B80A034F6DA1}</Project>
-      <Name>EntityHistory.EntityFrameworkCore.TestBase</Name>
+    <ProjectReference Include="..\..\src\EntityHistory.EntityFrameworkCore.Common\EntityHistory.EntityFrameworkCore.Common.csproj">
+      <Project>{A88F17EB-0816-4CBB-BC95-3679EEC23DBE}</Project>
+      <Name>EntityHistory.EntityFrameworkCore.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\EntityHistory.TestBase\EntityHistory.TestBase.csproj">
-      <Project>{4791f9f3-873d-4a01-9157-39f8d9f3a161}</Project>
+      <Project>{4791F9F3-873D-4A01-9157-39F8D9F3A161}</Project>
       <Name>EntityHistory.TestBase</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
-  </ItemGroup>
-  <ItemGroup>
-    <Analyzer Include="..\..\packages\xunit.analyzers.0.9.0\analyzers\dotnet\cs\xunit.analyzers.dll" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.1\build\xunit.core.props'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.core.2.3.1\build\xunit.core.targets'))" />
-    <Error Condition="!Exists('..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\xunit.runner.visualstudio.2.3.1\build\net20\xunit.runner.visualstudio.props'))" />
     <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets'))" />
     <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets'))" />
     <Error Condition="!Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets'))" />
   </Target>
-  <Import Project="..\..\packages\xunit.core.2.3.1\build\xunit.core.targets" Condition="Exists('..\..\packages\xunit.core.2.3.1\build\xunit.core.targets')" />
-  <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.linux.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.linux.targets')" />
   <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
   <Import Project="..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.11\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
 </Project>

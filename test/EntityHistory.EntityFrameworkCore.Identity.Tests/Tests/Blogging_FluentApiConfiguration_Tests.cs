@@ -3,15 +3,16 @@ using Autofac;
 using EntityHistory.Abstractions;
 using EntityHistory.Core;
 using EntityHistory.Core.Entities;
+using EntityHistory.EntityFrameworkCore.Identity.Tests.Blogging;
+using EntityHistory.EntityFrameworkCore.Identity.Tests.Blogging.Domain;
 using EntityHistory.EntityFrameworkCore.TestBase;
-using EntityHistory.EntityFrameworkCore.Tests.Blogging;
-using EntityHistory.EntityFrameworkCore.Tests.Blogging.Domain;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shouldly;
 using Xunit;
 
-namespace EntityHistory.EntityFrameworkCore.Tests.Tests
+namespace EntityHistory.EntityFrameworkCore.Identity.Tests.Tests
 {
     public class Blogging_FluentApiConfiguration_Tests : EntityFrameworkCoreTestBase<BloggingTestModule>
     {
@@ -41,7 +42,7 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
         [Fact]
         public void Should_Resolve_HistoryHelper_If_Registered()
         {
-            Container.TryResolve<IHistoryHelper<EntityEntry, EntityChangeSet<long>>>(out var helper);
+            Container.TryResolve<IHistoryHelper<EntityEntry, EntityChangeSet<long, IdentityUser<long>>>>(out var helper);
             helper.ShouldNotBeNull();
         }
 
@@ -208,7 +209,31 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
                     && x.NewValue == secondComment.RatingScale.ToString())
                 .ShouldNotBeNull();
         }
+
+        [Fact]
+        public void User_Ignore_PasswordHash_Test()
+        {
+            var context = Container.Resolve<BloggingDbContext>();
+
+            var userName = "User Name";
+            var user = new IdentityUser<long>
+            {
+                UserName = userName,
+                PasswordHash = "password hash"
+            };
+
+            context.Users.Add(user);
+            context.SaveChanges();
+
+            var propertyChanges = context.EntityChanges
+                .Where(x => x.ChangeType == EntityChangeType.Created && x.EntityTypeFullName == user.GetType().FullName)
+                .SelectMany(x => x.PropertyChanges).ToList();
+
+            propertyChanges.FirstOrDefault(x => x.PropertyName == nameof(user.UserName) && x.NewValue == userName)
+                .ShouldNotBeNull();
+
+            propertyChanges.FirstOrDefault(x => x.PropertyName == nameof(user.PasswordHash))
+                .ShouldBeNull();
+        }
     }
-
-
 }

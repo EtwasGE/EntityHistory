@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("EntityHistory.EntityFrameworkCore.Common")]
+[assembly: AssemblyTitle("EntityHistory.EntityFrameworkCore.TestBase")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("EntityHistory.EntityFrameworkCore.Common")]
+[assembly: AssemblyProduct("EntityHistory.EntityFrameworkCore.TestBase")]
 [assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("a88f17eb-0816-4cbb-bc95-3679eec23dbe")]
+[assembly: Guid("dceacb69-82ae-4e03-bf6a-b80a034f6da1")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,6 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-
-[assembly: InternalsVisibleTo("EntityHistory.EntityFrameworkCore")]
-[assembly: InternalsVisibleTo("EntityHistory.EntityFrameworkCore.Identity")]

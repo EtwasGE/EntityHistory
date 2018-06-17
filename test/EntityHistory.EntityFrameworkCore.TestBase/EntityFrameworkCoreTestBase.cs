@@ -5,9 +5,9 @@ using Autofac.Core;
 using EntityHistory.TestBase;
 using Microsoft.EntityFrameworkCore;
 
-namespace EntityHistory.EntityFrameworkCore.Tests
+namespace EntityHistory.EntityFrameworkCore.TestBase
 {
-    public abstract class EntityFrameworkCoreTestBase<TStartModule> : IntegratedTestBase<TStartModule>
+    public abstract class EntityFrameworkCoreTestBase<TStartModule> : TestBase<TStartModule>
         where TStartModule: IModule
     {
         public void UsingDbContext<TContext>(Action<TContext> action) where TContext : DbContext

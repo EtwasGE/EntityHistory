@@ -3,22 +3,22 @@ using Autofac;
 using EntityHistory.Abstractions;
 using EntityHistory.Core;
 using EntityHistory.Core.Entities;
+using EntityHistory.EntityFrameworkCore.Identity.Tests.BookLibrary;
+using EntityHistory.EntityFrameworkCore.Identity.Tests.BookLibrary.Domain;
 using EntityHistory.EntityFrameworkCore.TestBase;
-using EntityHistory.EntityFrameworkCore.Tests.BookLibrary;
-using EntityHistory.EntityFrameworkCore.Tests.BookLibrary.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Shouldly;
 using Xunit;
 
-namespace EntityHistory.EntityFrameworkCore.Tests.Tests
+namespace EntityHistory.EntityFrameworkCore.Identity.Tests.Tests
 {
     public class BookLibrary_AttributeConfiguration_Tests : EntityFrameworkCoreTestBase<BookLibraryTestModule>
     {
         [Fact]
         public void Should_Resolve_HistoryHelper_If_Registered()
         {
-            Container.TryResolve<IHistoryHelper<EntityEntry, EntityChangeSet<long, User>>>(out var helper);
+            Container.TryResolve<IHistoryHelper<EntityEntry, EntityChangeSet<long, CustomUser>>>(out var helper);
             helper.ShouldNotBeNull();
         }
 
@@ -97,14 +97,17 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
         }
 
         [Fact]
-        public void User_Ignore_Name_And_Override_Password_Test()
+        public void User_Test()
         {
             var context = Container.Resolve<BookLibraryDbContext>();
 
-            var user = new User
+            var userName = "User Name";
+            var passwordHash = "password hash";
+
+            var user = new CustomUser
             {
-                Name = "User Name",
-                Password = "Custom Password"
+                UserName = userName,
+                PasswordHash = passwordHash
             };
 
             context.Users.Add(user);
@@ -114,13 +117,10 @@ namespace EntityHistory.EntityFrameworkCore.Tests.Tests
                 .Where(x => x.ChangeType == EntityChangeType.Created && x.EntityTypeFullName == user.GetType().FullName)
                 .SelectMany(x => x.PropertyChanges).ToList();
 
-            propertyChanges.FirstOrDefault(x => x.PropertyName == nameof(user.Name))
-                .ShouldBeNull();
+            propertyChanges.FirstOrDefault(x => x.PropertyName == nameof(user.UserName) && x.NewValue == userName)
+                .ShouldNotBeNull();
 
-            propertyChanges.FirstOrDefault(x =>
-                    x.PropertyName == nameof(user.Password)
-                    && x.OriginalValue == null
-                    && x.NewValue == null)
+            propertyChanges.FirstOrDefault(x => x.PropertyName == nameof(user.PasswordHash) && x.NewValue == passwordHash)
                 .ShouldNotBeNull();
         }
 

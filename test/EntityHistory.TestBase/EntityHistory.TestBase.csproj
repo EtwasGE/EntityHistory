@@ -54,7 +54,7 @@
     <Compile Include="BaseModule.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="BootstrapperOptions.cs" />
-    <Compile Include="IntegratedTestBase.cs" />
+    <Compile Include="TestBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
